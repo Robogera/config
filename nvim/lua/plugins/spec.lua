@@ -4,12 +4,6 @@ return {
   { 'sindrets/diffview.nvim', lazy = true },
 
   {
-    'catppuccin/nvim',
-    name = 'catppuccin',
-    opts = {},
-  },
-
-  {
     'echasnovski/mini.base16',
     version = false,
     opts = {
