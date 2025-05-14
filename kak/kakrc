@@ -1,0 +1,78 @@
+set-option global tabstop 2
+set-option global indentwidth 2
+
+set-option global scrolloff 5,1
+set-option global grepcmd 'rg --column'
+
+set-option global completers filename word=all
+
+set-option -add global matching_pairs ‹ › « » “ ” ‘ ’
+
+set-option -add global ui_options ncurses_assistant=none ncurses_change_colors=true ncurses_status_on_top=true
+
+define-command -docstring "vsplit [<commands>]: split tmux vertically" \
+vsplit -params .. -command-completion %{
+    tmux-terminal-horizontal kak -c %val{session} -e "%arg{@}"
+}
+
+define-command -docstring "split [<commands>]: split tmux horizontally" \
+split -params .. -command-completion %{
+    tmux-terminal-vertical kak -c %val{session} -e "%arg{@}"
+}
+
+define-command -docstring "tabnew [<commands>]: create new tmux window" \
+tabnew -params .. -command-completion %{
+    tmux-terminal-window kak -c %val{session} -e "%arg{@}"
+}
+
+source "%val{config}/bundle/kak-bundle/rc/kak-bundle.kak"
+bundle-noload kak-bundle https://github.com/jdugan6240/kak-bundle
+
+bundle kak-lsp https://github.com/kak-lsp/kak-lsp %{
+  map global user l %{:enter-user-mode lsp<ret>} -docstring "LSP mode"
+}
+
+bundle auto-pairs https://github.com/alexherbo2/auto-pairs.kak %{}
+
+bundle fzf "https://github.com/andreyorst/fzf.kak" %{
+  map global user f %{:fzf-mode<ret>} -docstring "FZF mode"
+}
+#
+#plug "danr/kakoune-easymotion"
+#
+#plug "ul/kak-lsp" do %{
+#  cargo build --release --locked
+#  cargo install --force --path .
+#} config %{
+#  set-option global lsp_completion_trigger "execute-keys 'h<a-h><a-k>\S[^\h\n,=;*(){}\[\]]\z<ret>'"
+#  set-option global lsp_diagnostic_line_error_sign "E"
+#  set-option global lsp_diagnostic_line_warning_sign "W"
+#  hook global WinSetOption filetype=(c|cpp|rust|go|python) %{
+#    map window user "l" ":enter-user-mode lsp<ret>" -docstring "LSP mode"
+#    lsp-enable-window
+#    # lsp-auto-hover-enable
+#    # lsp-auto-hover-insert-mode-disable
+#    set-option window lsp_hover_anchor true
+#    set-face window DiagnosticError default+u
+#    set-face window DiagnosticWarning default+u
+#  }
+#  hook global WinSetOption filetype=rust %{
+#    set-option window lsp_server_configuration rust.clippy_preference="on"
+#  }
+#  hook global KakEnd .* lsp-exit
+#}
+#
+
+# echo %sh{CURRENT_WORKING_DIR="$(tmux display-message -pF '#{pane_current_path}')" tmux popup -E -h 75% -w 75% -- 'fortune | cowsay'}
+define-command tmux-popup-test %{
+  echo %sh{tmux popup -h 75% -w 75% -- 'fortune | cowsay'}
+}
+
+define-command tmux-pick-file %{ echo %sh{
+  CURRENT_WORKING_DIR="$(tmux display-message -pF '#{pane_current_path}')"
+  tmux popup -h 75% -w 75% -e kak_command_fifo=$kak_command_fifo -d "$CURRENT_WORKING_DIR" -- '
+    FILE="$(fd --type=file | fzf $FZF_DEFAULT_OPTS --preview="bat --color=always --plain --line-range=:38 {}")"
+    echo "edit $FILE" > $kak_command_fifo
+  '
+}}
+map global user d ":tmux-pick-file<ret>" -docstring "Find file by name"
