@@ -34,9 +34,6 @@ bundle kak-lsp https://github.com/kak-lsp/kak-lsp %{
 
 bundle auto-pairs https://github.com/alexherbo2/auto-pairs.kak %{}
 
-bundle fzf "https://github.com/andreyorst/fzf.kak" %{
-  map global user f %{:fzf-mode<ret>} -docstring "FZF mode"
-}
 #
 #plug "danr/kakoune-easymotion"
 #
@@ -63,16 +60,22 @@ bundle fzf "https://github.com/andreyorst/fzf.kak" %{
 #}
 #
 
-# echo %sh{CURRENT_WORKING_DIR="$(tmux display-message -pF '#{pane_current_path}')" tmux popup -E -h 75% -w 75% -- 'fortune | cowsay'}
-define-command tmux-popup-test %{
-  echo %sh{tmux popup -h 75% -w 75% -- 'fortune | cowsay'}
-}
+define-command tmux-pick-buffer %{ echo %sh{
+  CURRENT_WORKING_DIR="$(git rev-parse --show-toplevel 2>/dev/null || tmux display-message -pF '#{pane_current_path}')"
+  tmux popup -h 75% -w 75% -e kak_command_fifo=$kak_command_fifo -e kak_buflist="$kak_quoted_buflist" -d $CURRENT_WORKING_DIR --  '
+    set BUFFER "$(printf "%s\n" $kak_buflist | sk)"
+    echo "buffer $BUFFER" > $kak_command_fifo
+  '
+}}
+
+map global user d ":tmux-pick-buffer<ret>" -docstring "Find buffer by name"
 
 define-command tmux-pick-file %{ echo %sh{
-  CURRENT_WORKING_DIR="$(tmux display-message -pF '#{pane_current_path}')"
-  tmux popup -h 75% -w 75% -e kak_command_fifo=$kak_command_fifo -d "$CURRENT_WORKING_DIR" -- '
-    FILE="$(fd --type=file | fzf $FZF_DEFAULT_OPTS --preview="bat --color=always --plain --line-range=:38 {}")"
+  CURRENT_WORKING_DIR="$(git rev-parse --show-toplevel 2>/dev/null || tmux display-message -pF '#{pane_current_path}')"
+  tmux popup -E -h 75% -w 85% -e kak_command_fifo=$kak_command_fifo -d $CURRENT_WORKING_DIR -- '
+    set FILE "$(fd --type=file | sk --preview="bat --color=always --plain {}")"
     echo "edit $FILE" > $kak_command_fifo
   '
 }}
-map global user d ":tmux-pick-file<ret>" -docstring "Find file by name"
+
+map global user f ":tmux-pick-file<ret>" -docstring "Find file by name"
