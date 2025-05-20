@@ -28,9 +28,9 @@ tabnew -params .. -command-completion %{
 source "%val{config}/bundle/kak-bundle/rc/kak-bundle.kak"
 bundle-noload kak-bundle https://github.com/jdugan6240/kak-bundle
 
-bundle kak-lsp https://github.com/kak-lsp/kak-lsp %{
-  map global user l %{:enter-user-mode lsp<ret>} -docstring "LSP mode"
-}
+# bundle kak-lsp https://github.com/kak-lsp/kak-lsp %{
+  # map global user l %{:enter-user-mode lsp<ret>} -docstring "LSP mode"
+# }
 
 bundle auto-pairs https://github.com/alexherbo2/auto-pairs.kak %{}
 
@@ -79,3 +79,16 @@ define-command tmux-pick-file %{ echo %sh{
 }}
 
 map global user f ":tmux-pick-file<ret>" -docstring "Find file by name"
+
+eval %sh{kak-lsp}
+
+hook global WinSetOption filetype=(rust|python|go|javascript|typescript|c|cpp) %{
+  map global user l ':enter-user-mode lsp<ret>' -docstring 'LSP mode'
+  map global insert <tab> '<a-;>:try lsp-snippets-select-next-placeholders catch %{ execute-keys -with-hooks <lt>tab> }<ret>' -docstring 'Select next snippet placeholder'
+  lsp-enable-window
+  set-option global lsp_completion_trigger "execute-keys 'h<a-h><a-k>\S[^\h\n,=;*(){}\[\]]\z<ret>'"
+  set-option global lsp_diagnostic_line_error_sign "E"
+  set-option global lsp_diagnostic_line_warning_sign "W"
+  lsp-auto-hover-enable
+  lsp-auto-hover-insert-mode-disable
+}
