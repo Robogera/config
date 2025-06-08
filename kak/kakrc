@@ -1,14 +1,30 @@
-set-option global tabstop 2
-set-option global indentwidth 2
+set-option global tabstop 4
+set-option global indentwidth 4
 
-set-option global scrolloff 5,1
+set-option global scrolloff 12,1
 set-option global grepcmd 'rg --column'
 
-set-option global completers filename word=all
-
-set-option -add global matching_pairs ‹ › « » “ ” ‘ ’
-
 set-option -add global ui_options ncurses_assistant=none ncurses_change_colors=true ncurses_status_on_top=true
+
+hook global BufCreate .* %[
+    add-highlighter buffer/ number-lines -relative -hlcursor
+    add-highlighter buffer/ wrap
+]
+
+add-highlighter global/ show-matching
+
+
+### PLUGINS
+source "%val{config}/bundle/kak-bundle/rc/kak-bundle.kak"
+bundle-noload kak-bundle https://github.com/jdugan6240/kak-bundle
+
+bundle auto-pairs https://github.com/alexherbo2/auto-pairs.kak %{
+hook global BufCreate .* %[
+  enable-auto-pairs
+]
+}
+
+### EXTRA COMMANDS
 
 define-command -docstring "vsplit [<commands>]: split tmux vertically" \
 vsplit -params .. -command-completion %{
@@ -25,64 +41,42 @@ tabnew -params .. -command-completion %{
     tmux-terminal-window kak -c %val{session} -e "%arg{@}"
 }
 
-source "%val{config}/bundle/kak-bundle/rc/kak-bundle.kak"
-bundle-noload kak-bundle https://github.com/jdugan6240/kak-bundle
-
-# bundle kak-lsp https://github.com/kak-lsp/kak-lsp %{
-  # map global user l %{:enter-user-mode lsp<ret>} -docstring "LSP mode"
-# }
-
-bundle auto-pairs https://github.com/alexherbo2/auto-pairs.kak %{}
-
-#
-#plug "danr/kakoune-easymotion"
-#
-#plug "ul/kak-lsp" do %{
-#  cargo build --release --locked
-#  cargo install --force --path .
-#} config %{
-#  set-option global lsp_completion_trigger "execute-keys 'h<a-h><a-k>\S[^\h\n,=;*(){}\[\]]\z<ret>'"
-#  set-option global lsp_diagnostic_line_error_sign "E"
-#  set-option global lsp_diagnostic_line_warning_sign "W"
-#  hook global WinSetOption filetype=(c|cpp|rust|go|python) %{
-#    map window user "l" ":enter-user-mode lsp<ret>" -docstring "LSP mode"
-#    lsp-enable-window
-#    # lsp-auto-hover-enable
-#    # lsp-auto-hover-insert-mode-disable
-#    set-option window lsp_hover_anchor true
-#    set-face window DiagnosticError default+u
-#    set-face window DiagnosticWarning default+u
-#  }
-#  hook global WinSetOption filetype=rust %{
-#    set-option window lsp_server_configuration rust.clippy_preference="on"
-#  }
-#  hook global KakEnd .* lsp-exit
-#}
-#
-
 define-command tmux-pick-buffer %{ echo %sh{
   CURRENT_WORKING_DIR="$(git rev-parse --show-toplevel 2>/dev/null || tmux display-message -pF '#{pane_current_path}')"
-  tmux popup -h 75% -w 75% -e kak_command_fifo=$kak_command_fifo -e kak_buflist="$kak_quoted_buflist" -d $CURRENT_WORKING_DIR --  '
-    set BUFFER "$(printf "%s\n" $kak_buflist | sk)"
+  tmux popup -E -h 50% -w 50 -e kak_command_fifo=$kak_command_fifo -e kak_buflist="$kak_quoted_buflist" -d $CURRENT_WORKING_DIR -- '
+    set BUFFER $(echo $kak_buflist | string split --no-empty "\'" | sed "/^[[:space:]]*$/d" | sk)
     echo "buffer $BUFFER" > $kak_command_fifo
-  '
+	'
 }}
 
-map global user d ":tmux-pick-buffer<ret>" -docstring "Find buffer by name"
+map global user b ":tmux-pick-buffer<ret>" -docstring "Find buffer by name"
 
 define-command tmux-pick-file %{ echo %sh{
   CURRENT_WORKING_DIR="$(git rev-parse --show-toplevel 2>/dev/null || tmux display-message -pF '#{pane_current_path}')"
   tmux popup -E -h 75% -w 85% -e kak_command_fifo=$kak_command_fifo -d $CURRENT_WORKING_DIR -- '
-    set FILE "$(fd --type=file | sk --preview="bat --color=always --plain {}")"
+    set FILE $(fzf --ansi --bind "change:reload:fd --type file --color always" --preview "bat --color always --plain {}")
     echo "edit $FILE" > $kak_command_fifo
   '
 }}
 
 map global user f ":tmux-pick-file<ret>" -docstring "Find file by name"
 
+define-command tmux-livegrep-project %{ %sh{
+  CURRENT_WORKING_DIR="$(git rev-parse --show-toplevel 2>/dev/null || tmux display-message -pF '#{pane_current_path}')"
+  tmux popup -E -h 75% -w 85% -e kak_command_fifo=$kak_command_fifo -d $CURRENT_WORKING_DIR -- '
+    set FILE $(fzf --disabled --ansi --bind "change:reload:rg --column --color=always --smart-case {q}" | awk "{split(\$0,a,\":\"); print a[1],a[2]}")
+    echo "edit $FILE" > $kak_command_fifo
+  '
+  }
+}
+
+map global user g ":tmux-livegrep-project<ret>" -docstring "Goto grep match"
+
+### KAK LSP
+
 eval %sh{kak-lsp}
 
-hook global WinSetOption filetype=(rust|python|go|javascript|typescript|c|cpp) %{
+hook global WinSetOption filetype=(rust|python|go|javascript|typescript|c|cpp|jsonnet) %{
   map global user l ':enter-user-mode lsp<ret>' -docstring 'LSP mode'
   map global insert <tab> '<a-;>:try lsp-snippets-select-next-placeholders catch %{ execute-keys -with-hooks <lt>tab> }<ret>' -docstring 'Select next snippet placeholder'
   lsp-enable-window
