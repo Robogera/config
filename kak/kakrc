@@ -13,6 +13,12 @@ hook global BufCreate .* %[
 
 add-highlighter global/ show-matching
 
+hook global WinCreate .* %{
+    git show-diff
+}
+
+hook global BufWritePost .* %{ git update-diff }
+
 
 ### PLUGINS
 source "%val{config}/bundle/kak-bundle/rc/kak-bundle.kak"
@@ -44,7 +50,7 @@ tabnew -params .. -command-completion %{
 define-command tmux-pick-buffer %{ echo %sh{
   CURRENT_WORKING_DIR="$(git rev-parse --show-toplevel 2>/dev/null || tmux display-message -pF '#{pane_current_path}')"
   tmux popup -E -h 50% -w 50 -e kak_command_fifo=$kak_command_fifo -e kak_buflist="$kak_quoted_buflist" -d $CURRENT_WORKING_DIR -- '
-    set BUFFER $(echo $kak_buflist | string split --no-empty "\'" | sed "/^[[:space:]]*$/d" | sk)
+    set BUFFER $(echo $kak_buflist | /home/gera/.config/kak/scripts/buffers.fish | sk)
     echo "buffer $BUFFER" > $kak_command_fifo
 	'
 }}
