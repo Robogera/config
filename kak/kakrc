@@ -47,6 +47,17 @@ tabnew -params .. -command-completion %{
     tmux-terminal-window kak -c %val{session} -e "%arg{@}"
 }
 
+declare-user-mode windows
+map global windows v ': vsplit<ret>' -docstring "new kak window in a vertical split"
+map global windows s ': split<ret>' -docstring "new kak window in a split"
+map global windows t ': tabnew<ret>' -docstring "new kak window in a tmux tab"
+
+map global windows V ': tmux-repl-horizontal<ret>' -docstring "new repl in a vertical split"
+map global windows S ': tmux-repl-vertical<ret>' -docstring "new repl in a split"
+map global windows T ': tmux-repl-window<ret>' -docstring "new repl in a tmux tab"
+
+map global user w ": enter-user-mode windows<ret>" -docstring "Window mannipulations"
+
 define-command tmux-pick-buffer %{ echo %sh{
   CURRENT_WORKING_DIR="$(git rev-parse --show-toplevel 2>/dev/null || tmux display-message -pF '#{pane_current_path}')"
   tmux popup -E -h 50% -w 50 -e kak_command_fifo=$kak_command_fifo -e kak_buflist="$kak_quoted_buflist" -d $CURRENT_WORKING_DIR -- '
@@ -70,7 +81,7 @@ map global user f ":tmux-pick-file<ret>" -docstring "Find file by name"
 define-command tmux-livegrep-project %{ %sh{
   CURRENT_WORKING_DIR="$(git rev-parse --show-toplevel 2>/dev/null || tmux display-message -pF '#{pane_current_path}')"
   tmux popup -E -h 75% -w 85% -e kak_command_fifo=$kak_command_fifo -d $CURRENT_WORKING_DIR -- '
-    set FILE $(fzf --disabled --ansi --bind "change:reload:rg --column --color=always --smart-case {q}" | awk "{split(\$0,a,\":\"); print a[1],a[2]}")
+    set FILE $(fzf --disabled --ansi --bind "change:reload:rg -C3 --column --color=always --smart-case {q}" | awk "{split(\$0,a,\":\"); print a[1],a[2]}")
     echo "edit $FILE" > $kak_command_fifo
   '
   }
