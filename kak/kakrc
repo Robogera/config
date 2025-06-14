@@ -4,7 +4,11 @@ set-option global indentwidth 4
 set-option global scrolloff 12,1
 set-option global grepcmd 'rg --column'
 
-set-option -add global ui_options ncurses_assistant=none ncurses_change_colors=true ncurses_status_on_top=true
+set-option -add global ui_options terminal_assistant=dilbert
+
+hook global EnterDirectory .* %[
+    cd %sh{git rev-parse --show-toplevel 2>/dev/null || tmux display-message -pF '#{pane_current_path}'}
+]
 
 hook global BufCreate .* %[
     add-highlighter buffer/ number-lines -relative -hlcursor
@@ -81,7 +85,7 @@ map global user f ":tmux-pick-file<ret>" -docstring "Find file by name"
 define-command tmux-livegrep-project %{ %sh{
   CURRENT_WORKING_DIR="$(git rev-parse --show-toplevel 2>/dev/null || tmux display-message -pF '#{pane_current_path}')"
   tmux popup -E -h 75% -w 85% -e kak_command_fifo=$kak_command_fifo -d $CURRENT_WORKING_DIR -- '
-    set FILE $(fzf --disabled --ansi --bind "change:reload:rg -C3 --column --color=always --smart-case {q}" | awk "{split(\$0,a,\":\"); print a[1],a[2]}")
+    set FILE $(fzf --disabled --ansi --bind "change:reload:rg --column --color=always --smart-case {q}" | awk "{split(\$0,a,\":\"); print a[1],a[2]}")
     echo "edit $FILE" > $kak_command_fifo
   '
   }
