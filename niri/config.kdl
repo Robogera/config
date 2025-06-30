@@ -258,7 +258,11 @@ layout {
 // spawn-at-startup "alacritty" "-e" "fish"
 // spawn-at-startup "swayidle" "timeout" "120" "hyprlock"
 // spawn-at-startup "hyprpaper"
-spawn-at-startup "foot" "--server"
+spawn-at-startup "swww-daemon"
+spawn-at-startup "foot"
+hotkey-overlay {
+  skip-at-startup
+}
 
 // Uncomment this line to ask the clients to omit their client-side decorations if possible.
 // If the client will specifically ask for CSD, the request will be honored.
