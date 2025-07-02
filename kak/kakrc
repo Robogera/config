@@ -23,6 +23,7 @@ hook global WinCreate .* %{
 
 hook global BufWritePost .* %{ git update-diff }
 
+map global user c ": comment-line<ret>" -docstring "toggle line-style comment(s)"
 
 ### PLUGINS
 source "%val{config}/bundle/kak-bundle/rc/kak-bundle.kak"
@@ -32,6 +33,14 @@ bundle auto-pairs https://github.com/alexherbo2/auto-pairs.kak %{
 hook global BufCreate .* %[
   enable-auto-pairs
 ]
+}
+
+bundle langmap https://github.com/andreyorst/langmap.kak %{
+    set-option global langmap %opt{langmap_ru_jcuken}
+    map -docstring "toggle layout" global normal '<c-\>' ':      toggle-langmap<ret>'
+    map -docstring "toggle layout" global insert '<c-\>' '<a-;>: toggle-langmap<ret>'
+    map -docstring "toggle layout" global prompt '<c-\>' '<a-;>: toggle-langmap prompt<ret>'
+    require-module langmap
 }
 
 ### EXTRA COMMANDS
@@ -96,6 +105,14 @@ map global user g ":tmux-livegrep-project<ret>" -docstring "Goto grep match"
 ### KAK LSP
 
 eval %sh{kak-lsp}
+
+hook -group global BufSetOption filetype=yml %{
+    set-option buffer lsp_servers %{
+        [ansible-language-server]
+        args = []
+        root_globs = ["ansible.cfg", ".git", ".hg"]
+    }
+}
 
 hook global WinSetOption filetype=(rust|python|go|javascript|typescript|c|cpp|jsonnet) %{
   map global user l ':enter-user-mode lsp<ret>' -docstring 'LSP mode'
