@@ -1,0 +1,24 @@
+[window]
+opacity=0.95
+padding.x = 5
+padding.y = 5
+dynamic_padding = true
+
+[font]
+size=10
+
+[font.normal]
+family="Monaspace Neon"
+style="Regular"
+
+[font.bold]
+family="Monaspace Neon"
+style="SemiBold"
+
+[font.italic]
+family="Monaspace Neon"
+style="Italic"
+
+[font.bold_italic]
+family="Monaspace Neon"
+style="Bold Italic"
