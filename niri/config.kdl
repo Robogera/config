@@ -6,9 +6,9 @@
 // Input device configuration.
 // Find the full list of options on the wiki:
 // https://github.com/YaLTeR/niri/wiki/Configuration:-Input
-debug {
-  render-drm-device "/dev/dri/renderD128"
-}
+// debug {
+//   render-drm-device "/dev/dri/renderD128"
+// }
 input {
     keyboard {
         xkb {
@@ -178,9 +178,9 @@ layout {
         // You can use any CSS linear-gradient tool on the web to set these up.
         // Changing the color space is also supported, check the wiki for more info.
         //
-        active-gradient from="#D7195E" to="#AC144B" angle=73 relative-to="workspace-view"
+        active-gradient from="#f9cb00" to="#d7ccbc" angle=23 relative-to="workspace-view"
         // active-color "#CFCABE"
-		inactive-color "#15130F"
+        inactive-color "#15130F"
 
         // You can also color the gradient relative to the entire view
         // of the workspace, rather than relative to just the window itself.
@@ -246,10 +246,10 @@ layout {
     // Top and bottom struts will simply add outer gaps in addition to the area occupied by
     // layer-shell panels and regular gaps.
     struts {
-        left 12
-        right 12
-        top 12
-        bottom 12
+        left 8
+        right 8
+        top 8
+        bottom 8
     }
 }
 
@@ -261,7 +261,8 @@ layout {
 // spawn-at-startup "swayidle" "timeout" "120" "hyprlock"
 // spawn-at-startup "hyprpaper"
 spawn-at-startup "swww-daemon"
-spawn-at-startup "foot"
+spawn-at-startup "xwayland-satellite"
+spawn-at-startup "ironbar"
 hotkey-overlay {
   skip-at-startup
 }
@@ -276,7 +277,7 @@ prefer-no-csd
 // You can change the path where screenshots are saved.
 // A ~ at the front will be expanded to the home directory.
 // The path is formatted with strftime(3) to give you the screenshot date and time.
-screenshot-path "~/docs/screenshots/screenshot-%Y-%m-%d--%H-%M-%S.png"
+screenshot-path "~/pics/screenshots/screenshot-%Y-%m-%d--%H-%M-%S.png"
 
 // You can also set this to null to disable saving screenshots to disk.
 // screenshot-path null
@@ -350,8 +351,8 @@ binds {
     Mod+Shift+Slash { show-hotkey-overlay; }
 
     // Suggested binds for running programs: terminal, app launcher, screen locker.
-    Mod+T { spawn "footclient"; }
-    Mod+D { spawn "fuzzel"; }
+    Mod+T { spawn "alacritty"; }
+    Mod+D { spawn "launch.fish"; }
     Super+Alt+L { spawn "hyprlock"; }
 
     // You can also use a shell. Do this if you need pipes, multiple commands, etc.
@@ -561,9 +562,9 @@ binds {
     // Mod+Space       { switch-layout "next"; }
     // Mod+Shift+Space { switch-layout "prev"; }
 
-    Print { screenshot; }
-    Ctrl+Print { screenshot-screen; }
-    Alt+Print { screenshot-window; }
+    Mod+S { screenshot; }
+    Mod+Shift+S { screenshot-screen; }
+    Mod+Ctrl+S { screenshot-window; }
 
     // Applications such as remote-desktop clients and software KVM switches may
     // request that niri stops processing the keyboard shortcuts defined here
@@ -585,9 +586,9 @@ binds {
 }
 
 cursor {
-    xcursor-theme "tuxcursors"
-    xcursor-size 32
+    xcursor-theme "Premium"
+    xcursor-size 16
 
-    hide-when-typing
-    hide-after-inactive-ms 10000
+    // hide-when-typing
+    // hide-after-inactive-ms 10000
 }
