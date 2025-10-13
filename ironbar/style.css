@@ -1,0 +1,92 @@
+@import 'colors.css';
+
+* {
+    font-family: MonaspaceArgon;
+    font-size: 16;
+    border-radius: 0px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 1px;
+    padding-right: 1px;
+}
+
+button {
+    box-shadow: none;
+    border: none;
+    background: none;
+    outline: none;
+    text-shadow: none;
+    color: @cc-white;
+}
+
+.clock {
+    font-weight: bold;
+    margin-bottom: 7px;
+    padding-bottom: 3px;
+}
+
+.popup-clock {
+    background-color: @cc-black;
+    color: @cc-white;
+    border: 7px;
+    border-style: solid;
+    border-color: @cc-black;
+    padding: 0px;
+    margin: 0px;
+}
+
+.popup-clock .calendar {
+    background-color: @cc-white;
+    color: @cc-black;
+    border-style: none;
+}
+
+.clock:hover {
+    background-color: @cc-white;
+    color: @cc-black;
+}
+
+.popup-music {
+    background-color: @cc-black;
+    color: @cc-white;
+    border: 7px;
+    border-style: solid;
+    border-color: @cc-black;
+    padding: 0px;
+    margin: 0px;
+}
+scale slider{
+    min-height: 4px;  
+    color: @cc-bright-red;
+    outline: none;
+  border-radius: 10px;
+}
+scale through {
+  border-radius: 10px;
+  color: @cc-bright-red;
+}
+.workspaces .item.focused {
+    background-color: @cc-white;
+    color: @cc-black;
+}
+
+.workspaces .item.urgent {
+    background-color: @cc-bright-red;
+}
+
+.workspaces .item:hover {
+    background-color: @cc-white;
+    color: @cc-black;
+}
+
+.background {
+    background-color: @cc-black;
+}
+
+#bar {
+    background-color: @cc-black;
+    box-shadow: none;
+    min-height: 1.93em;
+    color: @cc-xgray12;
+}
+

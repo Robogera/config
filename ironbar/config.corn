@@ -1,0 +1,80 @@
+  let {
+   $music = {
+     type = "music"
+     player_type = "mpris"
+     format = "{title}"
+     truncate.mode = "end" 
+     truncate.max_length = 30
+     show_status_icon = false
+     icons.play = " |> "
+     icons.pause = " || "
+     icons.prev = "  << "
+     icons.next = " >> "
+     icons.volume = "VOL"
+     icons.track = "TR:"
+     icons.album = "AL:"
+     icons.artist = "AR:"
+     cover_image_size = 256
+   }
+
+ $volume = {
+     name = "som"
+     type = "volume"
+     format = "{icon} {percentage}%"
+     max_volume = 100
+     icons.volume_high = "VOL"
+     icons.volume_medium = "VOL"
+     icons.volume_low = "VOL"
+     icons.muted = "VOL"
+ }
+
+ $clock = {
+   type = "clock"
+   format = "%a, %d %b %H:%M"
+ }
+
+ $system = {
+   type = "sys_info"
+   name = "system"
+   interval.memory = 30
+   interval.cpu = 1
+   interval.temps = 5
+
+   format = [
+     "CPU {cpu_percent}%"
+     "TEM {temp_c:k10temp-Tctl}°C"
+     "MEM {memory_percent}%"
+   ]
+ }
+ 
+ $tray = {
+   type = "tray"
+   direction = "h"
+   icon_size = 14
+ }
+
+ $workspaces = {
+   type = "workspaces"
+   all_monitos = true
+   favorites = []
+   sort = "name"
+ }
+
+
+ $left = [ $clock $workspaces ]
+ $center = [ $music ]
+ $right = [ $tray $system $volume ]
+
+}
+
+in {
+   monitors.DP-1 = {
+       position = "left"
+       height = 12
+       icon_theme = "oomox-srcery-mthsrnn"
+       start = $left
+       center = $center
+       end = $right
+   }
+}
+
