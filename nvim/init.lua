@@ -61,9 +61,7 @@ vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open diagn
 
 -- Neovide GUI
 if vim.g.neovide then
-  if vim.fn.hostname() == 'HOMESTATION' then
-    vim.o.guifont = 'Iosevka Nerd Font Mono:h14'
-  elseif vim.fn.hostname() == 'workstation' then
-    vim.o.guifont = 'Iosevka Nerd Font:h14'
-  end
+  vim.g.neovide_opacity = 0.98
+  vim.g.neovide_normal_opacity = 0.94
+  vim.o.guifont = 'Monaspace Neon:h10'
 end
