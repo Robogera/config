@@ -1,0 +1,13 @@
+type              = process
+command           = /usr/bin/niri --session
+restart           = false
+working-dir       = $HOME
+depends-on        = dbus
+waits-for         = pipewire
+waits-for         = pipewire-pulse
+waits-for         = wireplumber
+log-type          = buffer
+after             = niri-shutdown
+chain-to          = niri-shutdown
+options:          always-chain
+
