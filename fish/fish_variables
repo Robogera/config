@@ -36,8 +36,9 @@ SETUVAR fish_pager_color_description:yellow\x1e\x2di
 SETUVAR fish_pager_color_prefix:normal\x1e\x2d\x2dbold\x1e\x2d\x2dunderline
 SETUVAR fish_pager_color_progress:brwhite\x1e\x2d\x2dbackground\x3dcyan
 SETUVAR fish_pager_color_selected_background:\x2dr
+SETUVAR fish_user_paths:/home/gera/\x2elocal/bin
 SETUVAR sponge_allow_previously_successful:true
-SETUVAR sponge_delay:2
+SETUVAR sponge_delay:10
 SETUVAR sponge_filters:sponge_filter_failed\x1esponge_filter_matched
 SETUVAR sponge_purge_only_on_exit:false
 SETUVAR sponge_regex_patterns:\x1d
