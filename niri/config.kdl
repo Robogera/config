@@ -261,7 +261,7 @@ layout {
 // spawn-at-startup "swayidle" "timeout" "120" "hyprlock"
 // spawn-at-startup "hyprpaper"
 spawn-at-startup "swww-daemon"
-spawn-at-startup "xwayland-satellite"
+// spawn-at-startup "xwayland-satellite"
 spawn-at-startup "ironbar"
 hotkey-overlay {
   skip-at-startup
