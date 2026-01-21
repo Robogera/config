@@ -63,5 +63,5 @@ vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open diagn
 if vim.g.neovide then
   vim.g.neovide_opacity = 0.985
   vim.g.neovide_normal_opacity = 0.93
-  vim.o.guifont = 'Monaspace Neon:h10'
+  vim.o.guifont = 'Gohu GohuFont:h10.2:#e-subpixelantialias:#h-none'
 end
