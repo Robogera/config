@@ -11,22 +11,22 @@ return {
         default = true,
       },
       palette = {
-        base00 = "#232136",
-        base01 = "#2a273f",
-        base02 = "#393552",
-        base03 = "#6e6a86",
-        base04 = "#908caa",
-        base05 = "#e0def4",
-        base06 = "#e0def4",
-        base07 = "#56526e",
-        base08 = "#eb6f92",
-        base09 = "#f6c177",
-        base0A = "#ea9a97",
-        base0B = "#3e8fb0",
-        base0C = "#9ccfd8",
-        base0D = "#c4a7e7",
-        base0E = "#f6c177",
-        base0F = "#56526e",
+        base00 = '#232136',
+        base01 = '#2a273f',
+        base02 = '#393552',
+        base03 = '#6e6a86',
+        base04 = '#908caa',
+        base05 = '#e0def4',
+        base06 = '#e0def4',
+        base07 = '#56526e',
+        base08 = '#eb6f92',
+        base09 = '#f6c177',
+        base0A = '#ea9a97',
+        base0B = '#3e8fb0',
+        base0C = '#9ccfd8',
+        base0D = '#c4a7e7',
+        base0E = '#f6c177',
+        base0F = '#56526e',
       },
     },
   },
@@ -34,7 +34,7 @@ return {
   {
     'nvim-treesitter/nvim-treesitter',
     version = false,
-    build = ":TSUpdate",
+    build = ':TSUpdate',
     opts = {
       highlight = { enable = true, },
       indent = { enable = true },
@@ -68,10 +68,11 @@ return {
         'c',
         'scala',
         'haskell',
+        'ocaml'
       },
     },
     config = function(_, opts)
-      require("nvim-treesitter.configs").setup(opts)
+      require('nvim-treesitter.configs').setup(opts)
     end,
   },
 
@@ -92,17 +93,16 @@ return {
       no_cyrillic_abbrev = false,
     },
   },
+
   {
-    "https://git.sr.ht/~swaits/scratch.nvim",
-    lazy = true,
-    keys = {
-      { "<leader>bs", "<cmd>Scratch<cr>",      desc = "Scratch Buffer",         mode = "n" },
-      { "<leader>bS", "<cmd>ScratchSplit<cr>", desc = "Scratch Buffer (split)", mode = "n" },
-    },
-    cmd = {
-      "Scratch",
-      "ScratchSplit",
-    },
-    opts = {},
+    "xiyaowong/transparent.nvim",
+    lazy = false,
   },
+
+  {
+    'stevearc/oil.nvim',
+    opts = {},
+    -- dependencies = { { "nvim-mini/mini.icons", opts = {} } },
+    lazy = false,
+  }
 }
