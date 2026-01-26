@@ -11,22 +11,22 @@ return {
         default = true,
       },
       palette = {
-        base00 = '#232136',
-        base01 = '#2a273f',
-        base02 = '#393552',
-        base03 = '#6e6a86',
-        base04 = '#908caa',
-        base05 = '#e0def4',
-        base06 = '#e0def4',
-        base07 = '#56526e',
-        base08 = '#eb6f92',
-        base09 = '#f6c177',
-        base0A = '#ea9a97',
-        base0B = '#3e8fb0',
-        base0C = '#9ccfd8',
-        base0D = '#c4a7e7',
-        base0E = '#f6c177',
-        base0F = '#56526e',
+        base00 = '#0f3b3a',
+        base01 = '#0d3433',
+        base02 = '#3C716E',
+        base03 = '#638E8B',
+        base04 = '#000000', -- ??
+        base05 = '#f0f0f0', -- text
+        base06 = '#000000', -- ??
+        base07 = '#000000', -- ??
+        base08 = '#a64a2e', -- red evil stuff
+        base09 = '#b154cf', -- integers
+        base0A = '#f15f22', -- ocaml types
+        base0B = '#009703', -- strings
+        base0C = '#00ff00', -- rust type names
+        base0D = '#40a4b9', -- function names
+        base0E = '#e99f10', -- keywords
+        base0F = '#b1c9c3', -- parens
       },
     },
   },
@@ -101,8 +101,19 @@ return {
 
   {
     'stevearc/oil.nvim',
-    opts = {},
+    opts = {
+      columns = {
+        "permissions", "size", "mtime",
+      }
+    },
     -- dependencies = { { "nvim-mini/mini.icons", opts = {} } },
     lazy = false,
-  }
+  },
+
+  {
+    'nvim-mini/mini.pick',
+    opts = {},
+    lazy = false,
+    version = false
+  },
 }

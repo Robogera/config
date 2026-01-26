@@ -76,6 +76,11 @@ return {
       vim.lsp.enable('lua_ls')
       vim.lsp.enable('rust_analyzer')
       vim.lsp.enable('gopls')
+      -- vim.lsp.config('ocamllsp', {
+      --   cmd = { 'opam exec -- ocamllsp' },
+      -- }
+      -- )
+      vim.lsp.enable('ocamllsp')
     end),
   },
 }
