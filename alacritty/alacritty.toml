@@ -8,17 +8,17 @@ dynamic_padding = true
 size=10
 
 [font.normal]
-family="Monaspace Neon"
+family="Terminus"
 style="Regular"
 
 [font.bold]
-family="Monaspace Neon"
-style="SemiBold"
+family="Terminus"
+style="Regular"
 
 [font.italic]
-family="Monaspace Neon"
-style="Italic"
+family="Terminus"
+style="Regular"
 
 [font.bold_italic]
-family="Monaspace Neon"
-style="Bold Italic"
+family="Terminus"
+style="Regular"
