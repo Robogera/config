@@ -19,7 +19,23 @@ return {
     opts = {},
   },
 
-  { 'kylechui/nvim-surround' },
+  {
+    'nvim-mini/mini.surround',
+    version = false,
+    opts = {
+      mappings = {
+        add = 'ma',
+        delete = 'md',
+        find = 'mf',
+        find_left = 'mF',
+        highlight = 'mh',
+        replace = 'mr',
+
+        suffix_last = 'l',
+        suffix_next = 'n',
+      },
+    }
+  },
 
   {
     'nativerv/cyrillic.nvim',

@@ -10,7 +10,7 @@ return {
       { 'T', function() require('hop').hint_char1({ direction = require('hop.hint').HintDirection.AFTER_CURSOR, current_line_only = true, hint_offset = -1 }) end, desc = 'Hop to the left (before symbol)',  remap = true },
 
       { 's', function() require('hop').hint_words({ current_line_only = false }) end,                                                                              desc = 'Hop to word',                      remap = true },
-      { 'S', function() require('hop').hint_char2({ current_line_only = false }) end,                                                                              desc = 'Hop to 2-char',                    remap = true },
+      -- { 'S', function() require('hop').hint_char2({ current_line_only = false }) end,                                                                              desc = 'Hop to 2-char',                    remap = true },
     },
   }
 }
