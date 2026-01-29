@@ -4,6 +4,36 @@ padding.x = 5
 padding.y = 5
 dynamic_padding = true
 
+[colors.primary]
+background = '#0D3433'
+foreground = '#f0f0f0'
+
+[colors.cursor]
+text = '#0D3433'
+cursor = '#f0f0f0'
+
+# Normal colors
+[colors.normal]
+black   = '#0D3433'
+red     = '#d74200'
+green   = '#009703'
+yellow  = '#98875f'
+blue    = '#0048bd'
+magenta = '#b154cf'
+cyan    = '#40a4b9'
+white   = '#d0d0d0'
+
+# Bright colors
+[colors.bright]
+black   = '#0f3b3a'
+red     = '#a64a2e'
+green   = '#00c420'
+yellow  = '#cfc041'
+blue    = '#0096ff'
+magenta = '#da5bd6'
+cyan    = '#77bfcf'
+white   = '#f0f0f0'
+
 [font]
 size=10
 
