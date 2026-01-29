@@ -14,12 +14,12 @@ return {
       { '<leader>hR', function() package.loaded.gitsigns.reset_buffer() end,              desc = 'Reset buffer' },
 
       { '<leader>hb', function() package.loaded.gitsigns.blame_line({ full = true }) end, desc = 'Blame line' },
-      { '<leader>tb', function() package.loaded.gitsigns.toggle_current_line_blame() end, desc = 'Toggle blame for current line' },
+      { '<leader>htb', function() package.loaded.gitsigns.toggle_current_line_blame() end, desc = 'Toggle blame for current line' },
 
       -- TODO: fix descriptions
       { '<leader>hd', function() package.loaded.gitsigns.diffthis() end,                  desc = 'Diff view' },
 
-      { '<leader>td', function() package.loaded.gitsigns.toggle_deleted() end,            desc = 'Toggle deleted' },
+      { '<leader>htd', function() package.loaded.gitsigns.toggle_deleted() end,            desc = 'Toggle deleted' },
 
       { 'ih',         function() package.loaded.gitsigns.select_hunk() end,               desc = 'Select inside hunk',           mode = { 'o', 'x' }, },
 

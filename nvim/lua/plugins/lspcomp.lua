@@ -4,21 +4,31 @@ end
 
 return {
   {
+    'echasnovski/mini.completion',
+    version = false,
+    opts = {
+      window = {
+        info = { height = 25, width = 80, border = "double" },
+        signature = { height = 25, width = 80, border = "double" },
+      },
+    },
+  },
+  {
     'neovim/nvim-lspconfig',
     lazy = false,
     keys = {
-      { '<leader>fm',     function() vim.lsp.buf.format { async = true } end, desc = 'Format buffer' },
-      { '<leader>ca',     vim.lsp.buf.code_action,                            desc = 'Code action' },
-      { '<leader>rf',     vim.lsp.buf.references,                             desc = 'References' },
-      { '<leader>rn',     vim.lsp.buf.rename,                                 desc = 'Rename' },
+      { '<leader>lf',     function() vim.lsp.buf.format { async = true } end, desc = 'Format buffer' },
+      { '<leader>la',     vim.lsp.buf.code_action,                            desc = 'Code action' },
+      { '<leader>ln',     vim.lsp.buf.rename,                                 desc = 'Rename' },
 
-      { '<leader>K',      vim.lsp.buf.hover,                                  desc = 'Hover' },
-      { '<leader><C-k>',  vim.lsp.buf.signature_help,                         desc = 'Signature help' },
+      { 'K',      vim.lsp.buf.hover,                                  desc = 'Hover' },
+      { '<C-k>',  vim.lsp.buf.signature_help,                         desc = 'Signature help' },
 
-      -- { '<leader>gd',     vim.lsp.buf.declaration,                            desc = 'Go to declaration' },
-      -- { '<leader>gD',     vim.lsp.buf.definition,                             desc = 'Go to definition' },
-      -- { '<leader>gi',     vim.lsp.buf.implementation,                         desc = 'Go to implementation' },
-      { '<leader>g<C-d>', vim.lsp.buf.type_definition,                        desc = 'Go to type definition' },
+      { '<leader>gd',     vim.lsp.buf.declaration,                            desc = 'Go to declaration' },
+      { '<leader>gD',     vim.lsp.buf.definition,                             desc = 'Go to definition' },
+      { '<leader>gi',     vim.lsp.buf.implementation,                         desc = 'Go to implementation' },
+      { '<leader>gtd', vim.lsp.buf.type_definition,                        desc = 'Go to type definition' },
+      { '<leader>gr',     vim.lsp.buf.references,                             desc = 'References' },
     },
     dependencies = {
       { 'echasnovski/mini.completion', version = false },

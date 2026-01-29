@@ -65,3 +65,4 @@ if vim.g.neovide then
   vim.g.neovide_normal_opacity = 0.93
   vim.o.guifont = 'Terminus:h9:#e-alias:#h-full'
 end
+
