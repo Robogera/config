@@ -11,7 +11,51 @@ return {
     },
   },
 
-  { 'folke/which-key.nvim' },
+  {
+    'folke/which-key.nvim',
+    event = "VeryLazy",
+    opts = {
+      icons = {
+        breadcrumb = ">>", -- symbol used in the command line area that shows your active key combo
+        separator = "->",  -- symbol used between a key and it's label
+        group = "+",       -- symbol prepended to a group
+        ellipsis = "...",
+        mappings = false,
+        rules = {},
+        colors = true,
+        keys = {
+          Up = "",
+          Down = "",
+          Left = "",
+          Right = "",
+          C = "",
+          M = "",
+          D = "",
+          S = "",
+          CR = "",
+          Esc = "",
+          ScrollWheelDown = "",
+          ScrollWheelUp = "",
+          NL = "",
+          BS = "",
+          Space = "",
+          Tab = "",
+          F1 = "",
+          F2 = "",
+          F3 = "",
+          F4 = "",
+          F5 = "",
+          F6 = "",
+          F7 = "",
+          F8 = "",
+          F9 = "",
+          F10 = "",
+          F11 = "",
+          F12 = "",
+        },
+      },
+    },
+  },
 
   {
     'windwp/nvim-autopairs',
