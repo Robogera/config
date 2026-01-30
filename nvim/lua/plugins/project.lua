@@ -12,8 +12,16 @@ return {
         '~/.config/',
         '~/Documents/slavemail/',
       },
+      forget_project_keys = {},
       picker = {
         type = 'telescope',
+
+        preview = {
+          enabled = false,
+          git_status = true,
+          git_fetch = false,
+          show_hidden = true,
+        },
       }
     },
     init = function()
