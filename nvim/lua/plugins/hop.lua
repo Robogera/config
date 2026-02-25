@@ -1,16 +1,38 @@
 return {
   {
     'smoka7/hop.nvim',
-    opts = { keys = 'etovxqpdygfblzhckisuran' },
+    config = (function(_, _)
+      require('hop').setup({
+        keys = 'etovxqpdygfblzhckisuran',
+        uppercase_labels = true,
+        create_hl_autocommand = false,
+      })
+      local set_highlights = function()
+        local set = vim.api.nvim_set_hl
+        set(0, 'HopNextKey', { ctermfg = 1})
+        -- Highlight used for the first key in a sequence.
+        set(0, 'HopNextKey1', { ctermfg = 14})
+        -- Highlight used for the second and remaining keys in a sequence.
+        set(0, 'HopNextKey2', { ctermfg = 6})
+        -- Highlight used for the unmatched part of the buffer.
+        set(0, 'HopUnmatched', { ctermfg = 7})
+        -- Highlight used for the fake cursor visible when hopping.
+        set(0, 'HopCursor', { link = 'Cursor'})
+        -- Highlight used for preview pattern
+        set(0, 'HopPreview', { link = 'IncSearch'})
+      end
+      set_highlights()
+      vim.api.nvim_create_autocmd('ColorScheme', {
+
+        group = vim.api.nvim_create_augroup('HopInitHighlight', {
+          clear = true,
+        }),
+        callback = set_highlights,
+      })
+    end),
     keys = {
-      { 'f', function() require('hop').hint_char1({ direction = require('hop.hint').HintDirection.AFTER_CURSOR, current_line_only = true }) end,                   desc = 'Hop to the right',                 remap = true },
-      { 'F', function() require('hop').hint_char1({ direction = require('hop.hint').HintDirection.BEFORE_CURSOR, current_line_only = true }) end,                  desc = 'Hop to the left',                  remap = true },
-
-      { 't', function() require('hop').hint_char1({ direction = require('hop.hint').HintDirection.AFTER_CURSOR, current_line_only = true, hint_offset = -1 }) end, desc = 'Hop to the right (before symbol)', remap = true },
-      { 'T', function() require('hop').hint_char1({ direction = require('hop.hint').HintDirection.AFTER_CURSOR, current_line_only = true, hint_offset = -1 }) end, desc = 'Hop to the left (before symbol)',  remap = true },
-
-      { 's', function() require('hop').hint_words({ current_line_only = false }) end,                                                                              desc = 'Hop to word',                      remap = true },
-      -- { 'S', function() require('hop').hint_char2({ current_line_only = false }) end,                                                                              desc = 'Hop to 2-char',                    remap = true },
+      { 's', function() require('hop').hint_words({ current_line_only = false }) end,                       desc = 'Hop to word',                 remap = true },
+      { 'S', function() require('hop').hint_words({ current_line_only = false, multi_windows = true }) end, desc = 'Hop to word (across splits)', remap = true },
     },
   }
 }
