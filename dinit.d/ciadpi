@@ -1,0 +1,6 @@
+type              = process
+command           = /usr/bin/ciadpi --ip=127.0.0.1 --port=10801 --proto=http,tls -f 4 -t 15 -S
+restart           = true
+working-dir       = $HOME
+log-type          = buffer
+options:          always-chain
