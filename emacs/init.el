@@ -131,3 +131,36 @@
   :defer t
   :config
   (add-to-list 'eshell-modules-list 'eshell-tramp))
+
+(use-package evil-leader
+  :demand t
+  :ensure t
+  :config
+  (evil-leader/set-leader "<SPC>")
+  (global-evil-leader-mode)
+  (evil-leader/set-key "bx" 'kill-current-buffer)
+  (evil-leader/set-key "bp" 'previous-buffer)
+  (evil-leader/set-key "bn" 'next-buffer))
+
+(use-package dired
+  :demand t
+  :ensure nil
+  :config
+  (defun dired-window () (window-at (frame-width) 1))
+  (eval-after-load 'dired
+    '(define-key dired-mode-map (kbd "C-o")
+      (lambda ()
+      (interactive)
+      (let ((dired-window (dired-window)))
+        (set-window-buffer dired-window
+          (find-file-noselect 
+          (dired-get-file-for-visit)))))))
+  (eval-after-load 'dired
+    '(define-key dired-mode-map (kbd "o")
+      (lambda ()
+      (interactive)
+      (let ((dired-window (dired-window)))
+        (set-window-buffer dired-window
+          (find-file-noselect 
+          (dired-get-file-for-visit)))
+        (select-window dired-window))))))
