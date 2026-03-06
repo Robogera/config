@@ -47,7 +47,8 @@
   :demand t
   :ensure nil
   :init
-  (load-theme 'modus-vivendi t)
+  ;; (load-theme 'modus-operandi-tinted t)
+  (setq tab-width 2)
   (setq make-backup-files nil) ; TODO: maybe move to a directory in $HOME
   (setq auto-save-default nil)
   (setq-default display-line-numbers-width 4)
@@ -110,7 +111,8 @@
   (require 'evil)
   (evil-mode 1)
   (evil-define-key '(normal) 'global (kbd "g c") 'comment-dwim)
-  (evil-define-key '(normal visual) 'global (kbd "s") 'avy-goto-word-0))
+  (evil-define-key '(normal visual) 'global (kbd "s") 'avy-goto-word-0)
+  (evil-define-key '(normal visual) 'global (kbd "S") 'avy-goto-line))
 
 (use-package avy
   :demand t
@@ -164,3 +166,55 @@
           (find-file-noselect 
           (dired-get-file-for-visit)))
         (select-window dired-window))))))
+
+(use-package tramp
+  :demand t
+  :ensure nil
+  :config
+  (setq tramp-default-method "sshx"))
+
+(use-package inhibit-mouse
+  :ensure t
+  :custom
+  (inhibit-mouse-adjust-mouse-highlight t)
+  (inhibit-mouse-adjust-show-help-function t)
+  :config
+  (if (daemonp)
+      (add-hook 'server-after-make-frame-hook #'inhibit-mouse-mode)
+    (inhibit-mouse-mode 1)))
+
+(use-package git-gutter
+  :demand t
+  :ensure t
+  :after evil-leader
+  :init
+  (evil-define-key '(normal visual) 'global (kbd "[c") 'git-gutter:previous-hunk)
+  (evil-define-key '(normal visual) 'global (kbd "]c") 'git-gutter:next-hunk)
+  (evil-leader/set-key "hh" 'git-gutter)
+  (evil-leader/set-key "hp" 'git-gutter:popup-hunk)
+  (evil-leader/set-key "hs" 'git-gutter:stage-hunk)
+  (evil-leader/set-key "hr" 'git-gutter:revert-hunk)
+  (evil-leader/set-key "hm" 'git-gutter:mark-hunk))
+
+(use-package eglot
+  :demand t
+  :ensure nil
+  :init
+  (setq eglot-ignored-server-capabilities '(:inlayHintProvider)))
+
+(use-package company
+  :demand t
+  :ensure t
+  :hook
+  (after-init . global-company-mode))
+
+(use-package alabaster-themes
+  :ensure t
+  :config
+  (load-theme 'alabaster-themes-dark t))
+
+(custom-set-variables
+ '(custom-safe-themes
+   '("01f6946488b7d6f6857e58b2372527b7bd1b63910f38123e72cf00e4c9651895"
+     default)))
+(custom-set-faces)
