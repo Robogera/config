@@ -2,11 +2,8 @@
 	email = robogera@gmail.com
 	name = Gera Cherdakly
 [core]
-	pager = delta
+	pager = cat
 [interactive]
-	diffFilter = delta --color-only
-[delta]
-	navigate = true
-  side-by-side = true
+	diffFilter = diff
 [merge]
 	conflictStyle = zdiff3
