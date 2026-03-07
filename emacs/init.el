@@ -1,3 +1,5 @@
+;; Elpaca boilerplate
+
 (defvar elpaca-installer-version 0.11)
 (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
 (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
@@ -37,40 +39,51 @@
 (add-hook 'after-init-hook #'elpaca-process-queues)
 (elpaca `(,@elpaca-order))
 
-
 (elpaca elpaca-use-package
   (elpaca-use-package-mode))
 
 (setq use-package-always-ensure t)
 
+;; Built-in package configuration
+
 (use-package emacs
   :demand t
   :ensure nil
   :init
-  ;; (load-theme 'modus-operandi-tinted t)
-  (setq tab-width 2)
-  (setq make-backup-files nil) ; TODO: maybe move to a directory in $HOME
-  (setq auto-save-default nil)
-  (setq-default display-line-numbers-width 4)
-  (setq scroll-conservatively 1000
-    scroll-margin 10)
+  ;; Turn this shi off
   (global-unset-key (kbd "<f10>"))
   (setq use-dialog-box nil) 
   (menu-bar-mode -1)
   (tool-bar-mode -1)
   (scroll-bar-mode -1)
   (setq inhibit-startup-message t)
-  (setq display-line-numbers-type 'relative)
+
+  (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+
+  ;; Force good tabs everywhere
+  (setq indent-tabs-mode nil)
+  (setq-default tab-width 2)
+
+  (setq make-backup-files nil) ; TODO: maybe move to a directory in $HOME
+  (setq auto-save-default nil)
+  (setq create-lockfiles nil)
+
   (global-display-line-numbers-mode 1)
+  (setq display-line-numbers-type 'relative)
+  (setq-default display-line-numbers-width 3)
+
+  (setq scroll-conservatively 1000
+    scroll-margin 10)
+
   (set-frame-font "Terminus 12" nil t)
   (setq enable-recursive-minibuffers t)
-  (setq sentence-end-double-space nil) 
-  (setq frame-inhibit-implied-resize t) ;; useless for a tiling window manager
-  (setq show-trailing-whitespace t) ;; self-explanatory
-  (setq indent-tabs-mode nil) ;; no tabs
-  ; (setq create-lockfiles nil) ;; no need to create lockfiles
+  (setq frame-inhibit-implied-resize t)
 
-  (set-charset-priority 'unicode) ;; utf8 everywhere
+  (setq sentence-end-double-space nil) 
+  (setq show-trailing-whitespace t)
+
+  ;; IDK if I even need this
+  (set-charset-priority 'unicode)
   (setq locale-coding-system 'utf-8
           coding-system-for-read 'utf-8
           coding-system-for-write 'utf-8)
@@ -80,44 +93,12 @@
   (prefer-coding-system 'utf-8)
   (setq default-process-coding-system '(utf-8-unix . utf-8-unix))
 
-  (global-set-key (kbd "<escape>") 'keyboard-escape-quit) ;; escape quits everything
-
   (setq byte-compile-warnings '(not free-vars unresolved noruntime lexical make-local))
   (setq native-comp-async-report-warnings-errors nil)
   (setq load-prefer-newer t)
 
   (show-paren-mode t))
 
-(use-package vterm
-  :demand t
-  :ensure t
-  :init
-  (setq vterm-max-scrollback 10000)
-  (setq vterm-timer-delay 0.001))
-
-(use-package eat
-  :demand t
-  :ensure t
-  :config
-  (add-hook 'eat-exec-hook
-    (lambda (_) (eat-char-mode)))
-  (add-hook 'eshell-mode-hook  #'eat-eshell-mode)
-  (add-hook 'eshell-mode-hook  #'eat-eshell-visual-command-mode))
-
-(use-package evil
-  :demand t
-  :ensure t
-  :init
-  (require 'evil)
-  (evil-mode 1)
-  (evil-define-key '(normal) 'global (kbd "g c") 'comment-dwim)
-  (evil-define-key '(normal visual) 'global (kbd "s") 'avy-goto-word-0)
-  (evil-define-key '(normal visual) 'global (kbd "S") 'avy-goto-line))
-
-(use-package avy
-  :demand t
-  :ensure t)
-  
 (use-package eshell
   :demand t
   :ensure nil
@@ -133,16 +114,6 @@
   :defer t
   :config
   (add-to-list 'eshell-modules-list 'eshell-tramp))
-
-(use-package evil-leader
-  :demand t
-  :ensure t
-  :config
-  (evil-leader/set-leader "<SPC>")
-  (global-evil-leader-mode)
-  (evil-leader/set-key "bx" 'kill-current-buffer)
-  (evil-leader/set-key "bp" 'previous-buffer)
-  (evil-leader/set-key "bn" 'next-buffer))
 
 (use-package dired
   :demand t
@@ -173,8 +144,44 @@
   :config
   (setq tramp-default-method "sshx"))
 
+(use-package eglot
+  :demand t
+  :ensure nil
+  :init
+  (setq eglot-ignored-server-capabilities '(:inlayHintProvider)))
+
+;; Third-party packages
+
+(use-package eat
+  :demand t
+  :config
+  (add-hook 'eat-exec-hook
+    (lambda (_) (eat-char-mode)))
+  (add-hook 'eshell-mode-hook  #'eat-eshell-mode)
+  (add-hook 'eshell-mode-hook  #'eat-eshell-visual-command-mode))
+
+(use-package evil
+  :demand t
+  :init
+  (require 'evil)
+  (evil-mode 1)
+  (evil-define-key '(normal) 'global (kbd "g c") 'comment-dwim)
+  (evil-define-key '(normal visual) 'global (kbd "s") 'avy-goto-word-0)
+  (evil-define-key '(normal visual) 'global (kbd "S") 'avy-goto-line))
+
+(use-package avy
+  :demand t)
+
+(use-package evil-leader
+  :demand t
+  :config
+  (evil-leader/set-leader "<SPC>")
+  (global-evil-leader-mode)
+  (evil-leader/set-key "bx" 'kill-current-buffer)
+  (evil-leader/set-key "bp" 'previous-buffer)
+  (evil-leader/set-key "bn" 'next-buffer))
+
 (use-package inhibit-mouse
-  :ensure t
   :custom
   (inhibit-mouse-adjust-mouse-highlight t)
   (inhibit-mouse-adjust-show-help-function t)
@@ -185,7 +192,6 @@
 
 (use-package git-gutter
   :demand t
-  :ensure t
   :after evil-leader
   :init
   (evil-define-key '(normal visual) 'global (kbd "[c") 'git-gutter:previous-hunk)
@@ -194,27 +200,37 @@
   (evil-leader/set-key "hp" 'git-gutter:popup-hunk)
   (evil-leader/set-key "hs" 'git-gutter:stage-hunk)
   (evil-leader/set-key "hr" 'git-gutter:revert-hunk)
-  (evil-leader/set-key "hm" 'git-gutter:mark-hunk))
-
-(use-package eglot
-  :demand t
-  :ensure nil
-  :init
-  (setq eglot-ignored-server-capabilities '(:inlayHintProvider)))
+  (evil-leader/set-key "hm" 'git-gutter:mark-hunk)
+  :config
+  (set-face-foreground 'git-gutter:modified "orange")
+  (set-face-foreground 'git-gutter:added "green")
+  (set-face-foreground 'git-gutter:deleted "red")
+  (setq git-gutter:update-interval 0.25)
+  (setq git-gutter:modified-sign "▌")
+  (setq git-gutter:added-sign "▌")
+  (setq git-gutter:deleted-sign "▌"))
 
 (use-package company
   :demand t
-  :ensure t
-  :hook
-  (after-init . global-company-mode))
+	:after evil
+	:config
+	(keymap-unset company-active-map "TAB" t) ; Be real, is there a difference?
+	(keymap-unset company-active-map "<tab>" t)
+	(keymap-unset company-active-map "<ret>" t)
+	(keymap-unset company-active-map "RET" t)
+	(global-company-mode) ; why wasn't the hook working?
+	(setq company-idle-delay nil)
+  (evil-define-key '(insert) 'global (kbd "C-n") 'company-complete)
+  (keymap-set company-active-map "<escape>" 'company-abort)
+  (keymap-set company-active-map "C-y" 'company-complete-selection))
 
 (use-package alabaster-themes
-  :ensure t
   :config
-  (load-theme 'alabaster-themes-dark t))
+  (load-theme 'alabaster-themes-dark-mono t))
 
 (custom-set-variables
  '(custom-safe-themes
    '("01f6946488b7d6f6857e58b2372527b7bd1b63910f38123e72cf00e4c9651895"
      default)))
 (custom-set-faces)
+
