@@ -1,14 +1,12 @@
-;; Elpaca boilerplate
-
-(defvar elpaca-installer-version 0.11)
+(defvar elpaca-installer-version 0.12)
 (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
 (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
-(defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
+(defvar elpaca-sources-directory (expand-file-name "sources/" elpaca-directory))
 (defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
                               :ref nil :depth 1 :inherit ignore
                               :files (:defaults "elpaca-test.el" (:exclude "extensions"))
-                              :build (:not elpaca--activate-package)))
-(let* ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
+                              :build (:not elpaca-activate)))
+(let* ((repo  (expand-file-name "elpaca/" elpaca-sources-directory))
        (build (expand-file-name "elpaca/" elpaca-builds-directory))
        (order (cdr elpaca-order))
        (default-directory repo))
@@ -42,14 +40,16 @@
 (elpaca elpaca-use-package
   (elpaca-use-package-mode))
 
-(setq use-package-always-ensure t)
-
-;; Built-in package configuration
-
 (use-package emacs
   :demand t
   :ensure nil
   :init
+  (load-theme 'leuven t)
+
+	(setq use-package-always-defer t)
+	(setq use-package-compute-statistics t)
+	(setq use-package-hook-name-suffix nil)
+
   ;; Turn this shi off
   (global-unset-key (kbd "<f10>"))
   (setq use-dialog-box nil) 
@@ -58,6 +58,7 @@
   (scroll-bar-mode -1)
   (setq inhibit-startup-message t)
 
+	;; Vim-esque
   (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
   ;; Force good tabs everywhere
@@ -99,138 +100,129 @@
 
   (show-paren-mode t))
 
+(use-package org-inlinetask
+	:commands
+	  org-inlinetask-insert-task
+	:config
+	  (message "org-inlinetask loaded!"))
+
 (use-package eshell
-  :demand t
-  :ensure nil
+	:commands eshell
   :init
+	(setq eshell-visual-commands '())
+	(setq eshell-visual-subcommands '())
+	(setq eshell-visual-options '())
   (setq eshell-scroll-to-bottom-on-input t)
   (setq eshell-history-size 10000)
   (setq eshell-save-history-on-exit t)
   (setq eshell-hist-ignoredups t))
 
 (use-package esh-module
-  :demand t
-  :ensure nil
-  :defer t
+	:after eshell
   :config
   (add-to-list 'eshell-modules-list 'eshell-tramp))
 
-(use-package dired
-  :demand t
-  :ensure nil
-  :config
-  (defun dired-window () (window-at (frame-width) 1))
-  (eval-after-load 'dired
-    '(define-key dired-mode-map (kbd "C-o")
-      (lambda ()
-      (interactive)
-      (let ((dired-window (dired-window)))
-        (set-window-buffer dired-window
-          (find-file-noselect 
-          (dired-get-file-for-visit)))))))
-  (eval-after-load 'dired
-    '(define-key dired-mode-map (kbd "o")
-      (lambda ()
-      (interactive)
-      (let ((dired-window (dired-window)))
-        (set-window-buffer dired-window
-          (find-file-noselect 
-          (dired-get-file-for-visit)))
-        (select-window dired-window))))))
-
-(use-package tramp
-  :demand t
-  :ensure nil
-  :config
-  (setq tramp-default-method "sshx"))
-
-(use-package eglot
-  :demand t
-  :ensure nil
-  :init
-  (setq eglot-ignored-server-capabilities '(:inlayHintProvider)))
-
-;; Third-party packages
+(use-package openwith
+	:ensure t
+	:hook dired-load-hook
+	:config
+  (setq openwith-associations
+    '(("pdf\\|djvu" "zathura" (file))
+			("mkv\\|mpe?g?\\|avi\\|mp4" "mpv" (file))
+      ("jpe?g\\|png\\|gif\\|tiff" "swayimg" (file))
+      ("xlsx?\\|docx?\\|odf\\|odt\\|ods" "libreoffice --norestore --nologo" (file)))))
 
 (use-package eat
-  :demand t
+	:ensure t
+	:defer t
+	:demand nil
+	:commands eat
+  :hook ((eshell-load-hook . eat-eshell-mode)
+				 (eat-exec-hook . (lambda (_) (eat-char-mode))))
   :config
-  (add-hook 'eat-exec-hook
-    (lambda (_) (eat-char-mode)))
-  (add-hook 'eshell-mode-hook  #'eat-eshell-mode)
-  (add-hook 'eshell-mode-hook  #'eat-eshell-visual-command-mode))
+	(setq eat-term-name "xterm-256color"))
 
 (use-package evil
+	:ensure t
   :demand t
-  :init
-  (require 'evil)
+  :config
   (evil-mode 1)
-  (evil-define-key '(normal) 'global (kbd "g c") 'comment-dwim)
-  (evil-define-key '(normal visual) 'global (kbd "s") 'avy-goto-word-0)
-  (evil-define-key '(normal visual) 'global (kbd "S") 'avy-goto-line))
+  (evil-define-key 'normal          'global (kbd "SPC b p") 'previous-buffer)
+  (evil-define-key 'normal          'global (kbd "SPC b n") 'next-buffer)
+  (evil-define-key 'normal          'global (kbd "SPC b x") 'kill-current-buffer)
+  (evil-define-key '(normal visual) 'global (kbd "SPC c c") 'comment-line)
+  (evil-define-key 'normal          'global (kbd "SPC c a") 'comment-indent)
+  (evil-define-key '(normal visual) 'global (kbd "SPC c k") 'comment-kill)
+  (evil-define-key '(normal visual) 'global (kbd "SPC c b") 'comment-box))
 
 (use-package avy
-  :demand t)
+	:ensure t
+	:after evil
+  :bind (:map evil-normal-state-map
+          ("s" . avy-goto-line)
+          ("S" . avy-goto-word-0)))
 
-(use-package evil-leader
-  :demand t
-  :config
-  (evil-leader/set-leader "<SPC>")
-  (global-evil-leader-mode)
-  (evil-leader/set-key "bx" 'kill-current-buffer)
-  (evil-leader/set-key "bp" 'previous-buffer)
-  (evil-leader/set-key "bn" 'next-buffer))
+(use-package company
+	:ensure t
+	:after evil
+	:bind (:map evil-insert-state-map
+				   ("C-n" . company-complete)
+				 :map company-active-map
+				   ("<tab>" . nil)
+				   ("<ret>" . nil)
+				   ("<escape>" . company-abort)
+				   ("C-y" . company-complete-selection))
+	:config (setq company-idle-delay nil))
 
-(use-package inhibit-mouse
-  :custom
-  (inhibit-mouse-adjust-mouse-highlight t)
-  (inhibit-mouse-adjust-show-help-function t)
+(use-package dired
   :config
-  (if (daemonp)
-      (add-hook 'server-after-make-frame-hook #'inhibit-mouse-mode)
-    (inhibit-mouse-mode 1)))
+	(defvar dired-dedicated-other-window nil
+		"A window marked to display files opened in dired.")
+
+	(defun dired-find-file-chosen-window (&optional focus)
+		"Opens a file in a remembered window or creates one if necessary. Switches focus if optional arg is not nil."
+		(interactive)
+		(setq dired-dedicated-other-window (or dired-dedicated-other-window
+																					 (window-in-direction 'below)
+																					 (window-in-direction 'right)
+																					 (next-window)
+																					 (split-window-vertically)))
+		(set-window-buffer dired-dedicated-other-window (find-file-noselect (dired-get-file-for-visit)))
+		(if focus (select-window dired-dedicated-other-window)))
+
+  (keymap-set dired-mode-map "o" 'dired-find-file-chosen-window)
+  (keymap-set dired-mode-map "C-o" (lambda () (interactive) (dired-find-file-chosen-window t))))
+
+(use-package eglot
+  :config
+  (setq eglot-ignored-server-capabilities '(:inlayHintProvider)))
 
 (use-package git-gutter
-  :demand t
-  :after evil-leader
-  :init
-  (evil-define-key '(normal visual) 'global (kbd "[c") 'git-gutter:previous-hunk)
-  (evil-define-key '(normal visual) 'global (kbd "]c") 'git-gutter:next-hunk)
-  (evil-leader/set-key "hh" 'git-gutter)
-  (evil-leader/set-key "hp" 'git-gutter:popup-hunk)
-  (evil-leader/set-key "hs" 'git-gutter:stage-hunk)
-  (evil-leader/set-key "hr" 'git-gutter:revert-hunk)
-  (evil-leader/set-key "hm" 'git-gutter:mark-hunk)
+	:ensure t
+	:bind (:map evil-normal-state-map
+				   ("SPC h h" . git-gutter)
+				   ("SPC h p" . git-gutter:popup-hunk)
+				   ("SPC h s" . git-gutter:stage-hunk)
+				   ("SPC h r" . git-gutter:revert-hunk)
+				   ("SPC h m" . git-gutter:mark-hunk)
+				   ("[ c" . git-gutter:previous-hunk)
+				   ("] c" . git-gutter:next-hunk)
+				 :map evil-visual-state-map
+				   ("[ c" . git-gutter:previous-hunk)
+				   ("] c" . git-gutter:next-hunk))
   :config
   (set-face-foreground 'git-gutter:modified "orange")
   (set-face-foreground 'git-gutter:added "green")
   (set-face-foreground 'git-gutter:deleted "red")
-  (setq git-gutter:update-interval 0.25)
+  (setq git-gutter:update-interval 0.66)
   (setq git-gutter:modified-sign "▌")
   (setq git-gutter:added-sign "▌")
-  (setq git-gutter:deleted-sign "▌"))
+  (setq git-gutter:deleted-sign "▌")
+	(git-gutter:start-update-timer))
 
-(use-package company
-  :demand t
-	:after evil
-	:config
-	(keymap-unset company-active-map "TAB" t) ; Be real, is there a difference?
-	(keymap-unset company-active-map "<tab>" t)
-	(keymap-unset company-active-map "<ret>" t)
-	(keymap-unset company-active-map "RET" t)
-	(global-company-mode) ; why wasn't the hook working?
-	(setq company-idle-delay nil)
-  (evil-define-key '(insert) 'global (kbd "C-n") 'company-complete)
-  (keymap-set company-active-map "<escape>" 'company-abort)
-  (keymap-set company-active-map "C-y" 'company-complete-selection))
-
-(use-package alabaster-themes
-  :config
-  (load-theme 'alabaster-themes-dark-mono t))
+;; Custom's stuff
 
 (custom-set-variables
- '(custom-safe-themes
-   '("01f6946488b7d6f6857e58b2372527b7bd1b63910f38123e72cf00e4c9651895"
-     default)))
-(custom-set-faces)
-
+ '(package-selected-packages nil))
+(custom-set-faces
+ )
