@@ -127,10 +127,10 @@
 	:hook dired-load-hook
 	:config
   (setq openwith-associations
-    '(("pdf\\|djvu" "zathura" (file))
-			("mkv\\|mpe?g?\\|avi\\|mp4" "mpv" (file))
-      ("jpe?g\\|png\\|gif\\|tiff" "swayimg" (file))
-      ("xlsx?\\|docx?\\|odf\\|odt\\|ods" "libreoffice --norestore --nologo" (file)))))
+    '(("\\.\\(?:cb[rtz]\\|djvu\\|p\\(?:df\\|s\\)\\)$" "zathura" (file))
+      ("\\.\\(?:gif\\|jp\\(?:e?g\\)\\|png\\|svg\\|tiff\\|webp\\)$" "swayimg" (file))
+			("\\.\\(?:docx?\\|od[fpst]\\|pptx?\\|xlsx?\\)$" "libreoffice --norestore --nologo" (file))
+      ("\\.\\(?:avi\\|m\\(?:kv\\|p\\(?:4\\|eg\\)\\)\\)$" "mpv" (file)))))
 
 (use-package eat
 	:ensure t
