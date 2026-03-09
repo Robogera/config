@@ -1,6 +1,6 @@
 #!/bin/fish
 
-cd ~/.launcher
+cd ~/.config/launcher
 
 ls . \
   | fzf --style=minimal \
