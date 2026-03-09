@@ -222,7 +222,5 @@
 
 ;; Custom's stuff
 
-(custom-set-variables
- '(package-selected-packages nil))
-(custom-set-faces
- )
+(custom-set-variables)
+(custom-set-faces)
