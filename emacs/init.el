@@ -182,11 +182,11 @@
 	(defun dired-find-file-chosen-window (&optional focus)
 		"Opens a file in a remembered window or creates one if necessary. Switches focus if optional arg is not nil."
 		(interactive)
-		(setq dired-dedicated-other-window (or dired-dedicated-other-window
-																					 (window-in-direction 'below)
-																					 (window-in-direction 'right)
-																					 (next-window)
-																					 (split-window-vertically)))
+		(if (not (window-valid-p dired-dedicated-other-window)) 
+			(setq dired-dedicated-other-window (or (window-in-direction 'below)
+																					 	 (window-in-direction 'right)
+																						 (next-window)
+																						 (split-window-vertically))))
 		(set-window-buffer dired-dedicated-other-window (find-file-noselect (dired-get-file-for-visit)))
 		(if focus (select-window dired-dedicated-other-window)))
 
