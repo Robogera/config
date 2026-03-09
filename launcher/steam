@@ -1,0 +1,1 @@
+/usr/bin/firejail --name=steam --noprofile --private=/home/gera/.isolate/steam /usr/bin/steam -silent -nobigpicture
