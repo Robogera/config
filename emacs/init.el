@@ -62,7 +62,7 @@
   (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
   ;; Force good tabs everywhere
-  (setq indent-tabs-mode t)
+  (setq indent-tabs-mode nil)
   (setq-default tab-width 2)
 
   (setq make-backup-files nil) ; TODO: maybe move to a directory in $HOME
@@ -147,7 +147,7 @@
   :demand t
   :config
   (evil-mode 1)
-  (setq evil-shift-width 2)
+  (setq evil-shift-width 1)
   (evil-define-key 'normal          'global (kbd "SPC b p") 'previous-buffer)
   (evil-define-key 'normal          'global (kbd "SPC b n") 'next-buffer)
   (evil-define-key 'normal          'global (kbd "SPC b x") 'kill-current-buffer)
@@ -195,6 +195,11 @@
 	(defvar dired-dedicated-other-window nil
 		"A window marked to display files opened in dired.")
 
+	(defun dired-mark-selected-window-as-chosen ()
+		"Marks currently selected window as preferred for dired"
+		(interactive)
+		(setq dired-dedicated-other-window (or (selected-window) dired-dedicated-other-window)))
+
 	(defun dired-find-file-chosen-window (&optional focus)
 		"Opens a file in a remembered window or creates one if necessary. Switches focus if optional arg is not nil."
 		(interactive)
@@ -206,6 +211,8 @@
 		(set-window-buffer dired-dedicated-other-window (find-file-noselect (dired-get-file-for-visit)))
 		(if focus (select-window dired-dedicated-other-window)))
 
+  (keymap-set evil-normal-state-map "SPC d m" 'dired-mark-selected-window-as-chosen)
+  (keymap-set dired-mode-map "-" 'dired-up-directory)
   (keymap-set dired-mode-map "o" 'dired-find-file-chosen-window)
   (keymap-set dired-mode-map "C-o" (lambda () (interactive) (dired-find-file-chosen-window t))))
 
