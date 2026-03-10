@@ -62,7 +62,7 @@
   (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
   ;; Force good tabs everywhere
-  (setq indent-tabs-mode nil)
+  (setq indent-tabs-mode t)
   (setq-default tab-width 2)
 
   (setq make-backup-files nil) ; TODO: maybe move to a directory in $HOME
@@ -147,13 +147,29 @@
   :demand t
   :config
   (evil-mode 1)
+  (setq evil-shift-width 2)
   (evil-define-key 'normal          'global (kbd "SPC b p") 'previous-buffer)
   (evil-define-key 'normal          'global (kbd "SPC b n") 'next-buffer)
   (evil-define-key 'normal          'global (kbd "SPC b x") 'kill-current-buffer)
   (evil-define-key '(normal visual) 'global (kbd "SPC c c") 'comment-line)
   (evil-define-key 'normal          'global (kbd "SPC c a") 'comment-indent)
   (evil-define-key '(normal visual) 'global (kbd "SPC c k") 'comment-kill)
-  (evil-define-key '(normal visual) 'global (kbd "SPC c b") 'comment-box))
+  (evil-define-key '(normal visual) 'global (kbd "SPC c b") 'comment-box)
+
+  (evil-define-key 'visual 'global (kbd "<") 
+    (lambda ()
+      (interactive)
+      (call-interactively 'evil-shift-left)
+      (evil-normal-state)
+      (evil-visual-restore)))
+
+  (evil-define-key 'visual 'global (kbd ">") 
+    (lambda ()
+      (interactive)
+      (call-interactively 'evil-shift-right)
+      (evil-normal-state)
+      (evil-visual-restore)))
+  )
 
 (use-package avy
 	:ensure t
