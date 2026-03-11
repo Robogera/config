@@ -148,6 +148,7 @@
   :config
   (evil-mode 1)
   (setq evil-shift-width 1)
+  (evil-define-key 'normal          'global (kbd "SPC b b") 'ibuffer)
   (evil-define-key 'normal          'global (kbd "SPC b p") 'previous-buffer)
   (evil-define-key 'normal          'global (kbd "SPC b n") 'next-buffer)
   (evil-define-key 'normal          'global (kbd "SPC b x") 'kill-current-buffer)
@@ -220,30 +221,41 @@
   :config
   (setq eglot-ignored-server-capabilities '(:inlayHintProvider)))
 
-(use-package git-gutter
-	:ensure t
-	:bind (:map evil-normal-state-map
-				   ("SPC h h" . git-gutter)
-				   ("SPC h p" . git-gutter:popup-hunk)
-				   ("SPC h s" . git-gutter:stage-hunk)
-				   ("SPC h r" . git-gutter:revert-hunk)
-				   ("SPC h m" . git-gutter:mark-hunk)
-				   ("[ c" . git-gutter:previous-hunk)
-				   ("] c" . git-gutter:next-hunk)
-				 :map evil-visual-state-map
-				   ("[ c" . git-gutter:previous-hunk)
-				   ("] c" . git-gutter:next-hunk))
-  :config
-  (set-face-foreground 'git-gutter:modified "orange")
-  (set-face-foreground 'git-gutter:added "green")
-  (set-face-foreground 'git-gutter:deleted "red")
-  (setq git-gutter:update-interval 0.66)
-  (setq git-gutter:modified-sign "▌")
-  (setq git-gutter:added-sign "▌")
-  (setq git-gutter:deleted-sign "▌")
-	(git-gutter:start-update-timer))
+;; (use-package git-gutter
+;; 	:ensure t
+;; 	:bind (:map evil-normal-state-map
+;; 				   ("SPC h h" . git-gutter)
+;; 				   ("SPC h p" . git-gutter:popup-hunk)
+;; 				   ("SPC h s" . git-gutter:stage-hunk)
+;; 				   ("SPC h r" . git-gutter:revert-hunk)
+;; 				   ("SPC h m" . git-gutter:mark-hunk)
+;; 				   ("[ c" . git-gutter:previous-hunk)
+;; 				   ("] c" . git-gutter:next-hunk)
+;; 				 :map evil-visual-state-map
+;; 				   ("[ c" . git-gutter:previous-hunk)
+;; 				   ("] c" . git-gutter:next-hunk))
+;;   :config
+;;   (set-face-foreground 'git-gutter:modified "orange")
+;;   (set-face-foreground 'git-gutter:added "green")
+;;   (set-face-foreground 'git-gutter:deleted "red")
+;;   (setq git-gutter:update-interval 0.66)
+;;   (setq git-gutter:modified-sign "▌")
+;;   (setq git-gutter:added-sign "▌")
+;;   (setq git-gutter:deleted-sign "▌")
+;; 	(git-gutter:start-update-timer))
+
+(use-package diff-hl-mode
+	:ensure
+	(:host github :repo "dgutov/diff-hl" :main "diff-hl.el")
+	:hook
+	(dired-mode-hook . diff-hl-dired-mode)
+	(vc-dir-mode-hook . turn-on-diff-hl-mode))
+  ;; :bind
+	;; (:map evil-normal-state-map)
+  ;; ("SPC h h" . diff-hl-mode))
 
 ;; Custom's stuff
 
 (custom-set-variables)
 (custom-set-faces)
+(put 'dired-find-alternate-file 'disabled nil)
