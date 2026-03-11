@@ -1,0 +1,9 @@
+ControlMaster auto
+ControlPersist yes
+ControlPath ~/.ssh/control/%C
+
+Host workstation 172.19.16.20 172.31.20.3
+  User gera
+
+Host *.hq.int-sys.ru
+  User ansiblebot
