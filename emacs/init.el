@@ -44,11 +44,10 @@
   :demand t
   :ensure nil
   :init
-  (load-theme 'leuven t)
-
-	(setq use-package-always-defer t)
-	(setq use-package-compute-statistics t)
-	(setq use-package-hook-name-suffix nil)
+  ;; (load-theme 'leuven t)
+  (setq use-package-always-defer t)
+  (setq use-package-compute-statistics t)
+  (setq use-package-hook-name-suffix nil)
 
   ;; Turn this shi off
   (global-unset-key (kbd "<f10>"))
@@ -58,7 +57,7 @@
   (scroll-bar-mode -1)
   (setq inhibit-startup-message t)
 
-	;; Vim-esque
+  ;; Vim-esque
   (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
   ;; Force good tabs everywhere
@@ -81,69 +80,70 @@
   (setq frame-inhibit-implied-resize t)
 
   (setq sentence-end-double-space nil) 
-  (setq show-trailing-whitespace t)
 
   ;; IDK if I even need this
-  (set-charset-priority 'unicode)
-  (setq locale-coding-system 'utf-8
-          coding-system-for-read 'utf-8
-          coding-system-for-write 'utf-8)
-  (set-terminal-coding-system 'utf-8)
-  (set-keyboard-coding-system 'utf-8)
-  (set-selection-coding-system 'utf-8)
-  (prefer-coding-system 'utf-8)
-  (setq default-process-coding-system '(utf-8-unix . utf-8-unix))
+  ;; (set-charset-priority 'unicode)
+  ;; (setq locale-coding-system 'utf-8
+  ;;         coding-system-for-read 'utf-8
+  ;;         coding-system-for-write 'utf-8)
+  ;; (set-terminal-coding-system 'utf-8)
+  ;; (set-keyboard-coding-system 'utf-8)
+  ;; (set-selection-coding-system 'utf-8)
+  ;; (prefer-coding-system 'utf-8)
+  ;; (setq default-process-coding-system '(utf-8-unix . utf-8-unix))
 
-  (setq byte-compile-warnings '(not free-vars unresolved noruntime lexical make-local))
-  (setq native-comp-async-report-warnings-errors nil)
+  ;; (setq byte-compile-warnings '(not free-vars unresolved noruntime lexical make-local))
+  (setq native-comp-async-report-warnings-errors t)
   (setq load-prefer-newer t)
 
   (show-paren-mode t))
 
 (use-package org-inlinetask
-	:commands
-	  org-inlinetask-insert-task
-	:config
-	  (message "org-inlinetask loaded!"))
+  :commands
+    org-inlinetask-insert-task
+  :config
+    (message "org-inlinetask loaded!"))
 
 (use-package eshell
-	:commands eshell
+  :commands eshell
+	:hook
+  (eshell-mode-hook . (lambda () (display-line-numbers-mode -1)))
   :init
-	(setq eshell-visual-commands '())
-	(setq eshell-visual-subcommands '())
-	(setq eshell-visual-options '())
+  (setq eshell-visual-commands '())
+  (setq eshell-visual-subcommands '())
+  (setq eshell-visual-options '())
   (setq eshell-scroll-to-bottom-on-input t)
   (setq eshell-history-size 10000)
   (setq eshell-save-history-on-exit t)
   (setq eshell-hist-ignoredups t))
 
 (use-package esh-module
-	:after eshell
+  :after eshell
   :config
   (add-to-list 'eshell-modules-list 'eshell-tramp))
 
 (use-package openwith
-	:ensure t
-	:hook dired-load-hook
-	:config
+  :ensure t
+  :hook dired-load-hook
+  :config
   (setq openwith-associations
     '(("\\.\\(?:cb[rtz]\\|djvu\\|p\\(?:df\\|s\\)\\)$" "zathura" (file))
       ("\\.\\(?:gif\\|jp\\(?:e?g\\)\\|png\\|svg\\|tiff\\|webp\\)$" "swayimg" (file))
-			("\\.\\(?:docx?\\|od[fpst]\\|pptx?\\|xlsx?\\)$" "libreoffice --norestore --nologo" (file))
+      ("\\.\\(?:docx?\\|od[fpst]\\|pptx?\\|xlsx?\\)$" "libreoffice --norestore --nologo" (file))
       ("\\.\\(?:avi\\|m\\(?:kv\\|p\\(?:4\\|eg\\)\\)\\)$" "mpv" (file)))))
 
 (use-package eat
-	:ensure t
-	:defer t
-	:demand nil
-	:commands eat
+  :ensure t
+  :defer t
+  :demand nil
+  :commands eat
   :hook ((eshell-load-hook . eat-eshell-mode)
-				 (eat-exec-hook . (lambda (_) (eat-char-mode))))
+         (eat-exec-hook . (lambda (_) (eat-char-mode))))
   :config
-	(setq eat-term-name "xterm-256color"))
+  (setq eat-term-name "xterm-256color"))
 
 (use-package evil
-	:ensure t
+  :ensure t
   :demand t
   :config
   (evil-mode 1)
@@ -173,44 +173,50 @@
   )
 
 (use-package avy
-	:ensure t
-	:after evil
+  :ensure t
+  :after evil
   :bind (:map evil-normal-state-map
-          ("s" . avy-goto-line)
-          ("S" . avy-goto-word-0)))
+          ("S" . avy-goto-line)
+          ("s" . avy-goto-word-0)))
 
-(use-package company
-	:ensure t
-	:after evil
-	:bind (:map evil-insert-state-map
-				   ("C-n" . company-complete)
-				 :map company-active-map
-				   ("<tab>" . nil)
-				   ("<ret>" . nil)
-				   ("<escape>" . company-abort)
-				   ("C-y" . company-complete-selection))
-	:config (setq company-idle-delay nil))
+(use-package vertico
+	:hook
+	(minibuffer-mode-hook . vertico-mode-enable-once)
+  :init
+  ;; (load-theme 'leuven t)
+  (defun vertico-mode-enable-once () (vertico-mode) (message "Enabling vertico...") (remove-hook 'minibuffer-mode-hook #'vertico-mode-enable-once ))
+	:ensure t)
+
+(use-package corfu-terminal
+	:bind
+	(:map evil-insert-state-map
+				("C-n" . completion-at-point)
+				:map corfu-map
+				("C-y" . corfu-complete))
+	:config
+	(global-corfu-mode)
+	:ensure t)
 
 (use-package dired
   :config
-	(defvar dired-dedicated-other-window nil
-		"A window marked to display files opened in dired.")
+  (defvar dired-dedicated-other-window nil
+    "A window marked to display files opened in dired.")
 
-	(defun dired-mark-selected-window-as-chosen ()
-		"Marks currently selected window as preferred for dired"
-		(interactive)
-		(setq dired-dedicated-other-window (or (selected-window) dired-dedicated-other-window)))
+  (defun dired-mark-selected-window-as-chosen ()
+    "Marks currently selected window as preferred for dired"
+    (interactive)
+    (setq dired-dedicated-other-window (or (selected-window) dired-dedicated-other-window)))
 
-	(defun dired-find-file-chosen-window (&optional focus)
-		"Opens a file in a remembered window or creates one if necessary. Switches focus if optional arg is not nil."
-		(interactive)
-		(if (not (window-valid-p dired-dedicated-other-window)) 
-			(setq dired-dedicated-other-window (or (window-in-direction 'below)
-																					 	 (window-in-direction 'right)
-																						 (next-window)
-																						 (split-window-vertically))))
-		(set-window-buffer dired-dedicated-other-window (find-file-noselect (dired-get-file-for-visit)))
-		(if focus (select-window dired-dedicated-other-window)))
+  (defun dired-find-file-chosen-window (&optional focus)
+    "Opens a file in a remembered window or creates one if necessary. Switches focus if optional arg is not nil."
+    (interactive)
+    (if (not (window-valid-p dired-dedicated-other-window)) 
+      (setq dired-dedicated-other-window (or (window-in-direction 'below)
+                                             (window-in-direction 'right)
+                                             (next-window)
+                                             (split-window-vertically))))
+    (set-window-buffer dired-dedicated-other-window (find-file-noselect (dired-get-file-for-visit)))
+    (if focus (select-window dired-dedicated-other-window)))
 
   (keymap-set evil-normal-state-map "SPC d m" 'dired-mark-selected-window-as-chosen)
   (keymap-set dired-mode-map "-" 'dired-up-directory)
@@ -221,41 +227,36 @@
   :config
   (setq eglot-ignored-server-capabilities '(:inlayHintProvider)))
 
-;; (use-package git-gutter
-;; 	:ensure t
-;; 	:bind (:map evil-normal-state-map
-;; 				   ("SPC h h" . git-gutter)
-;; 				   ("SPC h p" . git-gutter:popup-hunk)
-;; 				   ("SPC h s" . git-gutter:stage-hunk)
-;; 				   ("SPC h r" . git-gutter:revert-hunk)
-;; 				   ("SPC h m" . git-gutter:mark-hunk)
-;; 				   ("[ c" . git-gutter:previous-hunk)
-;; 				   ("] c" . git-gutter:next-hunk)
-;; 				 :map evil-visual-state-map
-;; 				   ("[ c" . git-gutter:previous-hunk)
-;; 				   ("] c" . git-gutter:next-hunk))
-;;   :config
-;;   (set-face-foreground 'git-gutter:modified "orange")
-;;   (set-face-foreground 'git-gutter:added "green")
-;;   (set-face-foreground 'git-gutter:deleted "red")
-;;   (setq git-gutter:update-interval 0.66)
-;;   (setq git-gutter:modified-sign "▌")
-;;   (setq git-gutter:added-sign "▌")
-;;   (setq git-gutter:deleted-sign "▌")
-;; 	(git-gutter:start-update-timer))
+(use-package moe-theme
+	:ensure t
+	:init
+	(load-theme 'moe-dark t))
 
 (use-package diff-hl-mode
-	:ensure
-	(:host github :repo "dgutov/diff-hl" :main "diff-hl.el")
-	:hook
-	(dired-mode-hook . diff-hl-dired-mode)
-	(vc-dir-mode-hook . turn-on-diff-hl-mode))
-  ;; :bind
-	;; (:map evil-normal-state-map)
-  ;; ("SPC h h" . diff-hl-mode))
+  :ensure
+  (:host github :repo "dgutov/diff-hl" :main "diff-hl.el")
+  :hook
+  (dired-mode-hook . diff-hl-dired-mode)
+  (vc-dir-mode-hook . turn-on-diff-hl-mode)
+  :bind
+  (:map evil-normal-state-map
+  ("SPC h r" . diff-hl-revert-hunk)
+  ("SPC h s" . diff-hl-show-hunk)
+  ("SPC h h" . diff-hl-mode))
+  :config
+  (diff-hl-flydiff-mode))
 
 ;; Custom's stuff
 
-(custom-set-variables)
-(custom-set-faces)
-(put 'dired-find-alternate-file 'disabled nil)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
