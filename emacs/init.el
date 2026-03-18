@@ -120,6 +120,12 @@
    '("9" . meow-digit-argument)
    '("0" . meow-digit-argument)
    '("/" . meow-keypad-describe-key)
+	 '("w j" . windmove-down)
+	 '("w k" . windmove-up)
+	 '("w h" . windmove-left)
+	 '("w l" . windmove-right)
+	 '("w v" . split-window-right)
+	 '("w s" . split-window-below)
    '("?" . meow-cheatsheet))
   (meow-normal-define-key
    '("0" . meow-expand-0)
@@ -211,8 +217,8 @@
   (add-to-list 'eshell-modules-list 'eshell-tramp))
 
 (use-package tramp
-	:init
-	(customize-set-variable 'tramp-use-connection-share nil))
+	:config
+	(setq tramp-use-connection-share nil))
 
 (use-package openwith
   :ensure t
