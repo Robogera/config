@@ -53,8 +53,8 @@
   (global-unset-key (kbd "<f10>"))
   (setq use-dialog-box nil) 
   (menu-bar-mode -1)
-  (tool-bar-mode -1)
-  (scroll-bar-mode -1)
+  ;; (tool-bar-mode -1)
+  ;; (scroll-bar-mode -1)
   (setq inhibit-startup-message t)
 
   ;; Vim-esque
@@ -210,6 +210,10 @@
   :config
   (add-to-list 'eshell-modules-list 'eshell-tramp))
 
+(use-package tramp
+	:init
+	(customize-set-variable 'tramp-use-connection-share nil))
+
 (use-package openwith
   :ensure t
   :hook dired-load-hook
@@ -234,6 +238,8 @@
   :ensure t
 	:commands avy-goto-word-1
   :init
+	(meow-motion-define-key
+	 '("F" . avy-goto-word-1))
 	(meow-normal-define-key
 	 '("F" . avy-goto-word-1)))
 
