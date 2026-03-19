@@ -96,6 +96,8 @@
   (setq native-comp-async-report-warnings-errors t)
   (setq load-prefer-newer t)
 
+	(setq default-input-method 'russian-computer)
+
   (show-paren-mode t))
 
 (use-package meow
