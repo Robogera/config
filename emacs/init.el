@@ -126,8 +126,18 @@
 	 '("w k" . windmove-up)
 	 '("w h" . windmove-left)
 	 '("w l" . windmove-right)
+	 '("w J" . windmove-swap-states-down)
+	 '("w K" . windmove-swap-states-up)
+	 '("w H" . windmove-swap-states-left)
+	 '("w L" . windmove-swap-states-right)
 	 '("w v" . split-window-right)
 	 '("w s" . split-window-below)
+	 '("w q" . delete-window)
+	 '("b p" . next-buffer)
+	 '("b n" . previous-buffer)
+	 '("b b" . switch-to-buffer)
+	 '("b l" . ibuffer)
+	 '("b x" . kill-current-buffer)
    '("?" . meow-cheatsheet))
   (meow-normal-define-key
    '("0" . meow-expand-0)
@@ -325,7 +335,11 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(auth-source-save-behavior nil)
+ '(org-agenda-files
+   '("~/.org/work/avo-megaschool-service.org"
+     "/home/gera/.org/work/org.org"
+     "/home/gera/.org/work/school-tr-26-lan.org")))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
