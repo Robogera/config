@@ -137,6 +137,7 @@
 	 '("b n" . previous-buffer)
 	 '("b b" . switch-to-buffer)
 	 '("b l" . ibuffer)
+	 '("b r" . rename-buffer)
 	 '("b x" . kill-current-buffer)
    '("?" . meow-cheatsheet))
   (meow-normal-define-key
