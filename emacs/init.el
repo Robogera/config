@@ -68,9 +68,9 @@
   (setq auto-save-default nil)
   (setq create-lockfiles nil)
 
-  (global-display-line-numbers-mode 1)
-  (setq display-line-numbers-type 'relative)
-  (setq-default display-line-numbers-width 3)
+  ;; (global-display-line-numbers-mode 1)
+  ;; (setq display-line-numbers-type 'relative)
+  ;; (setq-default display-line-numbers-width 3)
 
   (setq scroll-conservatively 1000
     scroll-margin 10)
@@ -310,10 +310,10 @@
   :config
   (setq eglot-ignored-server-capabilities '(:inlayHintProvider)))
 
-(use-package moe-theme
+(use-package almost-mono-themes
 	:ensure t
 	:init
-	(load-theme 'moe-dark t))
+	(load-theme 'almost-mono-gray t))
 
 (use-package diff-hl-mode
   :ensure
@@ -337,10 +337,14 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(auth-source-save-behavior nil)
+ '(custom-safe-themes
+	 '("623e9fe0532cc3a0bb31929b991a16f72fad7ad9148ba2dc81e395cd70afc744"
+		 "0f691b0fef27fdeffb52131f21914b6819044659c785109060dbfb72d6b38246"
+		 default))
  '(org-agenda-files
-   '("~/.org/work/avo-megaschool-service.org"
-     "/home/gera/.org/work/org.org"
-     "/home/gera/.org/work/school-tr-26-lan.org")))
+	 '("~/.org/work/avo-megaschool-service.org"
+		 "/home/gera/.org/work/org.org"
+		 "/home/gera/.org/work/school-tr-26-lan.org")))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
