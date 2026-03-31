@@ -51,7 +51,7 @@
 
   ;; Turn this shi off
   (global-unset-key (kbd "<f10>"))
-  (setq use-dialog-box nil) 
+  (setq use-dialog-box nil)
   (menu-bar-mode -1)
   ;; (tool-bar-mode -1)
   ;; (scroll-bar-mode -1)
@@ -61,8 +61,9 @@
   (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
   ;; Force good tabs everywhere
-  (setq indent-tabs-mode nil)
+  (setq-default indent-tabs-mode nil)
   (setq-default tab-width 2)
+  (setq-default show-trailing-whitespace t)
 
   (setq make-backup-files nil) ; TODO: maybe move to a directory in $HOME
   (setq auto-save-default nil)
@@ -79,7 +80,7 @@
   (setq enable-recursive-minibuffers t)
   (setq frame-inhibit-implied-resize t)
 
-  (setq sentence-end-double-space nil) 
+  (setq sentence-end-double-space nil)
 
   ;; IDK if I even need this
   ;; (set-charset-priority 'unicode)
@@ -96,14 +97,14 @@
   (setq native-comp-async-report-warnings-errors t)
   (setq load-prefer-newer t)
 
-	(setq default-input-method 'russian-computer)
+  (setq default-input-method 'russian-computer)
 
   (show-paren-mode t))
 
 (use-package meow
-	:ensure t
-	:demand t
-	:config
+  :ensure t
+  :demand t
+  :config
   (setq meow-cheatsheet-layout meow-cheatsheet-layout-qwerty)
   (meow-motion-define-key
    '("j" . meow-next)
@@ -122,23 +123,23 @@
    '("9" . meow-digit-argument)
    '("0" . meow-digit-argument)
    '("/" . meow-keypad-describe-key)
-	 '("w j" . windmove-down)
-	 '("w k" . windmove-up)
-	 '("w h" . windmove-left)
-	 '("w l" . windmove-right)
-	 '("w J" . windmove-swap-states-down)
-	 '("w K" . windmove-swap-states-up)
-	 '("w H" . windmove-swap-states-left)
-	 '("w L" . windmove-swap-states-right)
-	 '("w v" . split-window-right)
-	 '("w s" . split-window-below)
-	 '("w q" . delete-window)
-	 '("b p" . next-buffer)
-	 '("b n" . previous-buffer)
-	 '("b b" . switch-to-buffer)
-	 '("b l" . ibuffer)
-	 '("b r" . rename-buffer)
-	 '("b x" . kill-current-buffer)
+   '("w j" . windmove-down)
+   '("w k" . windmove-up)
+   '("w h" . windmove-left)
+   '("w l" . windmove-right)
+   '("w J" . windmove-swap-states-down)
+   '("w K" . windmove-swap-states-up)
+   '("w H" . windmove-swap-states-left)
+   '("w L" . windmove-swap-states-right)
+   '("w v" . split-window-right)
+   '("w s" . split-window-below)
+   '("w q" . delete-window)
+   '("b p" . next-buffer)
+   '("b n" . previous-buffer)
+   '("b b" . switch-to-buffer)
+   '("b l" . ibuffer)
+   '("b r" . rename-buffer)
+   '("b x" . kill-current-buffer)
    '("?" . meow-cheatsheet))
   (meow-normal-define-key
    '("0" . meow-expand-0)
@@ -202,8 +203,14 @@
    '("z" . meow-pop-selection)
    '("'" . repeat)
    '("<escape>" . ignore))
-	(meow-global-mode 1)
- )
+  (meow-global-mode 1))
+
+;; (use-package org-timer
+;;   :commands org-timer-set-timer
+;;   :config
+;;   (
+;;   ))
+
 
 (use-package org-inlinetask
   :commands
@@ -213,7 +220,7 @@
 
 (use-package eshell
   :commands eshell
-	:hook
+  :hook
   (eshell-mode-hook . (lambda () (display-line-numbers-mode -1)))
   :init
   (setq eshell-visual-commands '())
@@ -230,8 +237,8 @@
   (add-to-list 'eshell-modules-list 'eshell-tramp))
 
 (use-package tramp
-	:config
-	(setq tramp-use-connection-share nil))
+  :config
+  (setq tramp-use-connection-share nil))
 
 (use-package openwith
   :ensure t
@@ -255,30 +262,30 @@
 
 (use-package avy
   :ensure t
-	:commands avy-goto-word-1
+  :commands avy-goto-word-1
   :init
-	(meow-motion-define-key
-	 '("F" . avy-goto-word-1))
-	(meow-normal-define-key
-	 '("F" . avy-goto-word-1)))
+  (meow-motion-define-key
+   '("F" . avy-goto-word-1))
+  (meow-normal-define-key
+   '("F" . avy-goto-word-1)))
 
 (use-package vertico
-	:hook
-	(minibuffer-mode-hook . vertico-mode-enable-once)
+  :hook
+  (minibuffer-mode-hook . vertico-mode-enable-once)
   :init
   ;; (load-theme 'leuven t)
   (defun vertico-mode-enable-once () (vertico-mode) (message "Enabling vertico...") (remove-hook 'minibuffer-mode-hook #'vertico-mode-enable-once ))
-	:ensure t)
+  :ensure t)
 
 (use-package corfu-terminal
-	:bind
-	;; (:map evil-insert-state-map
-	;; 			("C-n" . completion-at-point)
-	;; 			:map corfu-map
-	;; 			("C-y" . corfu-complete))
-	:config
-	(global-corfu-mode)
-	:ensure t)
+  :bind
+  ;; (:map evil-insert-state-map
+  ;;      ("C-n" . completion-at-point)
+  ;;      :map corfu-map
+  ;;      ("C-y" . corfu-complete))
+  :config
+  (global-corfu-mode)
+  :ensure t)
 
 (use-package dired
   :config
@@ -293,7 +300,7 @@
   (defun dired-find-file-chosen-window (&optional focus)
     "Opens a file in a remembered window or creates one if necessary. Switches focus if optional arg is not nil."
     (interactive)
-    (if (not (window-valid-p dired-dedicated-other-window)) 
+    (if (not (window-valid-p dired-dedicated-other-window))
       (setq dired-dedicated-other-window (or (window-in-direction 'below)
                                              (window-in-direction 'right)
                                              (next-window)
@@ -310,10 +317,14 @@
   :config
   (setq eglot-ignored-server-capabilities '(:inlayHintProvider)))
 
-(use-package almost-mono-themes
-	:ensure t
-	:init
-	(load-theme 'almost-mono-gray t))
+;; (use-package almost-mono-themes
+;;  :ensure t
+;;  :init
+;;  (load-theme 'almost-mono-gray t))
+(use-package ancient-one-dark-theme
+  :ensure t
+  :init
+  (load-theme 'ancient-one-dark t))
 
 (use-package diff-hl-mode
   :ensure
@@ -338,13 +349,13 @@
  ;; If there is more than one, they won't work right.
  '(auth-source-save-behavior nil)
  '(custom-safe-themes
-	 '("623e9fe0532cc3a0bb31929b991a16f72fad7ad9148ba2dc81e395cd70afc744"
-		 "0f691b0fef27fdeffb52131f21914b6819044659c785109060dbfb72d6b38246"
-		 default))
+   '("623e9fe0532cc3a0bb31929b991a16f72fad7ad9148ba2dc81e395cd70afc744"
+     "0f691b0fef27fdeffb52131f21914b6819044659c785109060dbfb72d6b38246"
+     default))
  '(org-agenda-files
-	 '("~/.org/work/avo-megaschool-service.org"
-		 "/home/gera/.org/work/org.org"
-		 "/home/gera/.org/work/school-tr-26-lan.org")))
+   '("~/.org/work/avo-megaschool-service.org"
+     "/home/gera/.org/work/org.org"
+     "/home/gera/.org/work/school-tr-26-lan.org")))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
