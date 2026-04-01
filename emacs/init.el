@@ -63,6 +63,7 @@
   ;; Force good tabs everywhere
   (setq-default indent-tabs-mode nil)
   (setq-default tab-width 2)
+  (setq-default standard-indent 2)
   (setq-default show-trailing-whitespace t)
 
   (setq make-backup-files nil) ; TODO: maybe move to a directory in $HOME
@@ -109,6 +110,8 @@
   (meow-motion-define-key
    '("j" . meow-next)
    '("k" . meow-prev)
+   '("h" . meow-left)
+   '("l" . meow-right)
    '("<escape>" . ignore))
   (meow-leader-define-key
    ;; Use SPC (0-9) for digit arguments.
@@ -202,6 +205,8 @@
    '("Y" . meow-sync-grab)
    '("z" . meow-pop-selection)
    '("'" . repeat)
+   '(">" . indent-rigidly-right-to-tab-stop)
+   '("<" . indent-rigidly-left-to-tab-stop)
    '("<escape>" . ignore))
   (meow-global-mode 1))
 
@@ -221,7 +226,9 @@
 (use-package eshell
   :commands eshell
   :hook
-  (eshell-mode-hook . (lambda () (display-line-numbers-mode -1)))
+  (eshell-mode-hook . (lambda ()
+                        (setq-local show-trailing-whitespace nil)
+                        (display-line-numbers-mode -1)))
   :init
   (setq eshell-visual-commands '())
   (setq eshell-visual-subcommands '())
