@@ -45,7 +45,6 @@
   :demand t
   :ensure nil
   :init
-  ;; (load-theme 'leuven t)
   (setq use-package-always-defer t)
   (setq use-package-compute-statistics t)
   (setq use-package-hook-name-suffix nil)
@@ -271,15 +270,15 @@
         remote-file-name-inhibit-auto-save-visited t)
   (setq tramp-use-connection-share nil))
 
-;; (use-package openwith
-;;   :ensure t
-;;   :hook dired-load-hook
-;;   :config
-;;   (setq openwith-associations
-;;     '(("\\.\\(?:cb[rtz]\\|djvu\\|p\\(?:df\\|s\\)\\)$" "zathura" (file))
-;;       ("\\.\\(?:gif\\|jp\\(?:e?g\\)\\|png\\|svg\\|tiff\\|webp\\)$" "imv" (file))
-;;       ("\\.\\(?:docx?\\|od[fpst]\\|pptx?\\|xlsx?\\)$" "libreoffice --norestore --nologo" (file))
-;;       ("\\.\\(?:avi\\|m\\(?:kv\\|p\\(?:4\\|eg\\)\\)\\)$" "mpv" (file)))))
+(use-package openwith
+  :ensure t
+  :hook dired-load-hook
+  :config
+  (setq openwith-associations
+    '(("\\.\\(?:cb[rtz]\\|djvu\\|p\\(?:df\\|s\\)\\)$" "zathura" (file))
+      ("\\.\\(?:gif\\|jp\\(?:e?g\\)\\|png\\|svg\\|tiff\\|webp\\)$" "imv" (file))
+      ("\\.\\(?:docx?\\|od[fpst]\\|pptx?\\|xlsx?\\)$" "libreoffice --norestore --nologo" (file))
+      ("\\.\\(?:avi\\|m\\(?:kv\\|p\\(?:4\\|eg\\)\\)\\)$" "mpv" (file)))))
 
 (use-package eat
   :ensure t
@@ -304,7 +303,6 @@
   :hook
   (minibuffer-mode-hook . vertico-mode-enable-once)
   :init
-  ;; (load-theme 'leuven t)
   (defun vertico-mode-enable-once () (vertico-mode) (message "Enabling vertico...") (remove-hook 'minibuffer-mode-hook #'vertico-mode-enable-once ))
   :ensure t)
 
@@ -351,6 +349,7 @@
 (use-package base16-theme
   :ensure t
   :init
+  (setq-default base16-theme-256-color-source 'colors)
   (load-theme 'base16-phd t))
 
 (use-package diff-hl-mode
