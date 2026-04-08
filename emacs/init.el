@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (defvar elpaca-installer-version 0.12)
 (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
 (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
@@ -53,8 +54,8 @@
   (global-unset-key (kbd "<f10>"))
   (setq use-dialog-box nil)
   (menu-bar-mode -1)
-  ;; (tool-bar-mode -1)
-  ;; (scroll-bar-mode -1)
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
   (setq inhibit-startup-message t)
 
   ;; Vim-esque
@@ -84,21 +85,32 @@
   (setq sentence-end-double-space nil)
 
   ;; IDK if I even need this
-  ;; (set-charset-priority 'unicode)
-  ;; (setq locale-coding-system 'utf-8
-  ;;         coding-system-for-read 'utf-8
-  ;;         coding-system-for-write 'utf-8)
-  ;; (set-terminal-coding-system 'utf-8)
-  ;; (set-keyboard-coding-system 'utf-8)
-  ;; (set-selection-coding-system 'utf-8)
-  ;; (prefer-coding-system 'utf-8)
-  ;; (setq default-process-coding-system '(utf-8-unix . utf-8-unix))
+  (set-charset-priority 'unicode)
+  (setq locale-coding-system 'utf-8
+          coding-system-for-read 'utf-8
+          coding-system-for-write 'utf-8)
+  (set-terminal-coding-system 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
+  (set-selection-coding-system 'utf-8)
+  (prefer-coding-system 'utf-8)
+  (setq default-process-coding-system '(utf-8-unix . utf-8-unix))
 
   ;; (setq byte-compile-warnings '(not free-vars unresolved noruntime lexical make-local))
   (setq native-comp-async-report-warnings-errors t)
   (setq load-prefer-newer t)
 
   (setq default-input-method 'russian-computer)
+
+  (setq-default bidi-display-reordering 'left-to-right
+              bidi-paragraph-direction 'left-to-right)
+  (setq bidi-inhibit-bpa t)
+
+  (setq redisplay-skip-fontification-on-input t)
+
+  (setq read-process-output-max (* 8 1024 1024))
+
+  (setq-default cursor-in-non-selected-windows nil)
+  (setq highlight-nonselected-windows nil)
 
   (show-paren-mode t))
 
@@ -241,21 +253,33 @@
 (use-package esh-module
   :after eshell
   :config
-  (add-to-list 'eshell-modules-list 'eshell-tramp))
+  (add-to-list 'eshell-modules-list 'eshell-tramp)
+  (add-to-list 'eshell-modules-list 'eshell-elecslash))
 
 (use-package tramp
   :config
+  (connection-local-set-profile-variables
+   'remote-direct-async-process
+   '((tramp-direct-async-process . t)))
+
+  (connection-local-set-profiles
+   '(:application tramp :protocol "scp")
+   'remote-direct-async-process)
+
+  (setq remote-file-name-inhibit-locks t
+        tramp-use-scp-direct-remote-copying t
+        remote-file-name-inhibit-auto-save-visited t)
   (setq tramp-use-connection-share nil))
 
-(use-package openwith
-  :ensure t
-  :hook dired-load-hook
-  :config
-  (setq openwith-associations
-    '(("\\.\\(?:cb[rtz]\\|djvu\\|p\\(?:df\\|s\\)\\)$" "zathura" (file))
-      ("\\.\\(?:gif\\|jp\\(?:e?g\\)\\|png\\|svg\\|tiff\\|webp\\)$" "swayimg" (file))
-      ("\\.\\(?:docx?\\|od[fpst]\\|pptx?\\|xlsx?\\)$" "libreoffice --norestore --nologo" (file))
-      ("\\.\\(?:avi\\|m\\(?:kv\\|p\\(?:4\\|eg\\)\\)\\)$" "mpv" (file)))))
+;; (use-package openwith
+;;   :ensure t
+;;   :hook dired-load-hook
+;;   :config
+;;   (setq openwith-associations
+;;     '(("\\.\\(?:cb[rtz]\\|djvu\\|p\\(?:df\\|s\\)\\)$" "zathura" (file))
+;;       ("\\.\\(?:gif\\|jp\\(?:e?g\\)\\|png\\|svg\\|tiff\\|webp\\)$" "imv" (file))
+;;       ("\\.\\(?:docx?\\|od[fpst]\\|pptx?\\|xlsx?\\)$" "libreoffice --norestore --nologo" (file))
+;;       ("\\.\\(?:avi\\|m\\(?:kv\\|p\\(?:4\\|eg\\)\\)\\)$" "mpv" (file)))))
 
 (use-package eat
   :ensure t
@@ -324,14 +348,10 @@
   :config
   (setq eglot-ignored-server-capabilities '(:inlayHintProvider)))
 
-;; (use-package almost-mono-themes
-;;  :ensure t
-;;  :init
-;;  (load-theme 'almost-mono-gray t))
-(use-package ancient-one-dark-theme
+(use-package base16-theme
   :ensure t
   :init
-  (load-theme 'ancient-one-dark t))
+  (load-theme 'base16-phd t))
 
 (use-package diff-hl-mode
   :ensure
