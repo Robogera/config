@@ -56,6 +56,10 @@
   (tool-bar-mode -1)
   (scroll-bar-mode -1)
   (setq inhibit-startup-message t)
+  (global-hl-line-mode 1)
+  (blink-cursor-mode -1)
+
+  (setq select-enable-clipboard t)
 
   ;; Vim-esque
   (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
@@ -110,6 +114,8 @@
 
   (setq-default cursor-in-non-selected-windows nil)
   (setq highlight-nonselected-windows nil)
+
+  (setq window-combination-resize t)
 
   (show-paren-mode t))
 
@@ -221,13 +227,6 @@
    '("<escape>" . ignore))
   (meow-global-mode 1))
 
-;; (use-package org-timer
-;;   :commands org-timer-set-timer
-;;   :config
-;;   (
-;;   ))
-
-
 (use-package org-inlinetask
   :commands
     org-inlinetask-insert-task
@@ -292,26 +291,38 @@
 
 (use-package avy
   :ensure t
-  :commands avy-goto-word-1
+  :commands avy-goto-char-2
+  :config
+  (set-face-attribute 'avy-lead-face nil
+                      :background 'unspecified
+                      :foreground "Cyan")
+  (set-face-attribute 'avy-lead-face-0 nil
+                      :background 'unspecified
+                      :foreground "Dark cyan")
   :init
+  (setq avy-background t)
   (meow-motion-define-key
-   '("F" . avy-goto-word-1))
+   '("F" . avy-goto-char-2))
   (meow-normal-define-key
-   '("F" . avy-goto-word-1)))
+   '("F" . avy-goto-char-2)))
 
 (use-package vertico
   :hook
   (minibuffer-mode-hook . vertico-mode-enable-once)
   :init
-  (defun vertico-mode-enable-once () (vertico-mode) (message "Enabling vertico...") (remove-hook 'minibuffer-mode-hook #'vertico-mode-enable-once ))
+  (defun vertico-mode-enable-once () (vertico-mode) (remove-hook 'minibuffer-mode-hook #'vertico-mode-enable-once ))
   :ensure t)
 
-(use-package corfu-terminal
+(use-package corfu
+  :commands completion-at-point
+  :after meow
   :bind
-  ;; (:map evil-insert-state-map
-  ;;      ("C-n" . completion-at-point)
-  ;;      :map corfu-map
-  ;;      ("C-y" . corfu-complete))
+  (:map meow-insert-state-keymap
+        ("C-n" . completion-at-point)
+        :map corfu-map
+        ("C-n" . corfu-next)
+        ("C-p" . corfu-previous)
+        ("C-y" . corfu-complete))
   :config
   (global-corfu-mode)
   :ensure t)
