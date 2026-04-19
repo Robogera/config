@@ -365,7 +365,7 @@
   :ensure t
   :init
   (setq-default base16-theme-256-color-source 'colors)
-  (load-theme 'base16-phd t))
+  (load-theme 'base16-eldritch t))
 
 (use-package diff-hl-mode
   :ensure
