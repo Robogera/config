@@ -129,8 +129,8 @@
    '("k" . meow-prev)
    '("h" . meow-left)
    '("l" . meow-right)
-   '("C-j" . scroll-up)
-   '("C-k" . scroll-down)
+   ;; '("C-j" . scroll-up)
+   ;; '("C-k" . scroll-down)
    '("<escape>" . ignore))
   (meow-leader-define-key
    ;; Use SPC (0-9) for digit arguments.
@@ -164,8 +164,8 @@
    '("b x" . kill-current-buffer)
    '("?" . meow-cheatsheet))
   (meow-normal-define-key
-   '("C-j" . scroll-up)
-   '("C-k" . scroll-down)
+   ;; '("C-j" . scroll-up)
+   ;; '("C-k" . scroll-down)
    '("0" . meow-expand-0)
    '("9" . meow-expand-9)
    '("8" . meow-expand-8)
