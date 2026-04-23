@@ -305,7 +305,7 @@
                       :foreground "Dark cyan")
   :init
   (setq avy-background t)
-  ((setq avy-keys (number-sequence ?a ?z))
+  (setq avy-keys (number-sequence ?a ?z))
   (meow-motion-define-key
    '("F" . avy-goto-char-timer))
   (meow-normal-define-key
