@@ -56,7 +56,7 @@
   (tool-bar-mode -1)
   (scroll-bar-mode -1)
   (setq inhibit-startup-message t)
-  (global-hl-line-mode 1)
+  ;; (global-hl-line-mode 1)
   (blink-cursor-mode -1)
 
   (setq select-enable-clipboard t)
@@ -279,7 +279,7 @@
   :config
   (setq openwith-associations
     '(("\\.\\(?:cb[rtz]\\|djvu\\|p\\(?:df\\|s\\)\\)$" "zathura" (file))
-      ("\\.\\(?:gif\\|jp\\(?:e?g\\)\\|png\\|svg\\|tiff\\|webp\\)$" "imv" (file))
+      ("\\.\\(?:gif\\|jp\\(?:e?g\\)\\|png\\|svg\\|tiff\\|webp\\)$" "swayimg" (file))
       ("\\.\\(?:docx?\\|od[fpst]\\|pptx?\\|xlsx?\\)$" "libreoffice --norestore --nologo" (file))
       ("\\.\\(?:avi\\|m\\(?:kv\\|p\\(?:4\\|eg\\)\\)\\)$" "mpv" (file)))))
 
@@ -362,11 +362,11 @@
   :config
   (setq eglot-ignored-server-capabilities '(:inlayHintProvider)))
 
-(use-package base16-theme
+(use-package color-theme-modern
   :ensure t
   :init
-  (setq-default base16-theme-256-color-source 'colors)
-  (load-theme 'base16-eldritch t))
+  ;; (setq-default base16-theme-256-color-source 'colors)
+  (load-theme 'resolve t))
 
 (use-package diff-hl-mode
   :ensure
