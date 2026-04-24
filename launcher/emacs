@@ -1,1 +1,1 @@
-emacs
+foot -a emacs -- emacs -nw
