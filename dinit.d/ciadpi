@@ -1,5 +1,5 @@
 type              = process
-command           = /usr/bin/ciadpi --ip=127.0.0.1 --port=10801 --proto=http,tls -f 4 -t 15 -S
+command           = /usr/bin/ciadpi --ip=127.0.0.1 --port=10901 -Kh,t -o1 -s4 -s6 -a1
 restart           = true
 working-dir       = $HOME
 log-type          = buffer
