@@ -235,7 +235,25 @@
   :commands
     org-inlinetask-insert-task
   :config
-    (message "org-inlinetask loaded!"))
+  (message "org-inlinetask loaded!"))
+
+(use-package telega
+  :commands telega
+  :ensure t
+  :hook
+  (telega-before-auth-hook .
+          (lambda ()
+             (telega--addProxy '(:server "127.0.0.1" :port 10802 :type (:@type "proxyTypeSocks5")) :enable t)))
+  (telega-chat-mode-hook . (lambda ()
+                     (setq-local show-trailing-whitespace nil)))
+  (telega-root-mode-hook . (lambda ()
+                     (setq-local show-trailing-whitespace nil))))
+
+(use-package eww
+  :commands eww
+  :hook
+  (eww-mode-hook . (lambda ()
+                     (setq-local show-trailing-whitespace nil))))
 
 (use-package eshell
   :commands eshell
@@ -273,15 +291,15 @@
         remote-file-name-inhibit-auto-save-visited t)
   (setq tramp-use-connection-share nil))
 
-(use-package openwith
-  :ensure t
-  :hook dired-load-hook
-  :config
-  (setq openwith-associations
-    '(("\\.\\(?:cb[rtz]\\|djvu\\|p\\(?:df\\|s\\)\\)$" "zathura" (file))
-      ("\\.\\(?:gif\\|jp\\(?:e?g\\)\\|png\\|svg\\|tiff\\|webp\\)$" "swayimg" (file))
-      ("\\.\\(?:docx?\\|od[fpst]\\|pptx?\\|xlsx?\\)$" "libreoffice --norestore --nologo" (file))
-      ("\\.\\(?:avi\\|m\\(?:kv\\|p\\(?:4\\|eg\\)\\)\\)$" "mpv" (file)))))
+;; (use-package openwith
+;;   :ensure t
+;;   :hook dired-load-hook
+;;   :config
+;;   (setq openwith-associations
+;;     '(("\\.\\(?:cb[rtz]\\|djvu\\|p\\(?:df\\|s\\)\\)$" "zathura" (file))
+;;       ("\\.\\(?:gif\\|jp\\(?:e?g\\)\\|png\\|svg\\|tiff\\|webp\\)$" "imv" (file))
+;;       ("\\.\\(?:docx?\\|od[fpst]\\|pptx?\\|xlsx?\\)$" "libreoffice --norestore --nologo" (file))
+;;       ("\\.\\(?:avi\\|m\\(?:kv\\|p\\(?:4\\|eg\\)\\)\\)$" "mpv" (file)))))
 
 (use-package eat
   :ensure t
@@ -329,6 +347,10 @@
         ("C-p" . corfu-previous)
         ("C-y" . corfu-complete))
   :config
+  (set-face-attribute 'corfu-default nil
+                      :background "#638CCC")
+  (set-face-attribute 'corfu-current nil
+                      :background "#90B2E4")
   (global-corfu-mode)
   :ensure t)
 
@@ -371,18 +393,14 @@
 (use-package diff-hl-mode
   :ensure
   (:host github :repo "dgutov/diff-hl" :main "diff-hl.el")
+  :commands diff-hl-mode
   :hook
   (dired-mode-hook . diff-hl-dired-mode)
   (vc-dir-mode-hook . turn-on-diff-hl-mode)
-  :bind
-  ;; (:map evil-normal-state-map
-  ;; ("SPC h r" . diff-hl-revert-hunk)
-  ;; ("SPC h s" . diff-hl-show-hunk)
-  ;; ("SPC h h" . diff-hl-mode))
-  :config
-  (diff-hl-flydiff-mode))
-
-;; Custom's stuff
+  :init
+  (meow-leader-define-key
+   '("v v" . diff-hl-mode)
+   '("v s" . diff-hl-stage-dwim)))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -395,7 +413,9 @@
      "0f691b0fef27fdeffb52131f21914b6819044659c785109060dbfb72d6b38246"
      default))
  '(org-agenda-files
-   '("~/.org/work/avo-megaschool-service.org"
+   '("/home/gera/.org/work/is-networking-vrn.org"
+     "/home/gera/.org/work/avo-s112.org"
+     "/home/gera/.org/work/avo-megaschool-service.org"
      "/home/gera/.org/work/org.org"
      "/home/gera/.org/work/school-tr-26-lan.org")))
 (custom-set-faces
@@ -403,4 +423,4 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+)
