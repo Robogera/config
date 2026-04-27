@@ -156,6 +156,11 @@
    '("w v" . split-window-right)
    '("w s" . split-window-below)
    '("w q" . delete-window)
+   '("w +" . enlarge-window)
+   '("w >" . enlarge-window-horizontally)
+   '("w -" . shrink-window)
+   '("w <" . shrink-window-horizontally)
+   '("w b" . balance-windows)
    '("b p" . next-buffer)
    '("b n" . previous-buffer)
    '("b b" . switch-to-buffer)
@@ -389,7 +394,7 @@
   :ensure t
   :init
   ;; (setq-default base16-theme-256-color-source 'colors)
-  (load-theme 'resolve t))
+  (load-theme 'cobalt t))
 
 (use-package diff-hl-mode
   :ensure
