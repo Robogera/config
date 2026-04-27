@@ -382,6 +382,7 @@
 
 (use-package eglot
   :config
+  (setq eldoc-echo-area-prefer-doc-buffer t)
   (setq eglot-ignored-server-capabilities '(:inlayHintProvider)))
 
 (use-package color-theme-modern
