@@ -396,6 +396,15 @@
   ;; (setq-default base16-theme-256-color-source 'colors)
   (load-theme 'cobalt t))
 
+(use-package pass
+  :ensure t
+  :commands pass)
+
+(use-package pinentry
+  :ensure t
+  :init
+  (pinentry-start))                     ; TODO lazy load
+
 (use-package diff-hl-mode
   :ensure
   (:host github :repo "dgutov/diff-hl" :main "diff-hl.el")
