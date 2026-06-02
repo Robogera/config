@@ -1,6 +1,6 @@
 #!/bin/fish
 
-cd ~/.config/launcher
+cd ~/.config/launcher/
 
 ls . \
   | fzf --style=minimal \
@@ -11,4 +11,4 @@ if string match -qr '[^0]' $pipestatus
     exit 1
 end
 
-mmsg -d spawn,"env $exec"
+mmsg dispatch spawn,"env $exec"
